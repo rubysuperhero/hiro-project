@@ -1,0 +1,7 @@
+tmp/
+.DS_Store
+downloads/
+experiments/
+paths.yml
+notes/
+projects/

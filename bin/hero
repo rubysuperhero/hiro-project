@@ -1,0 +1,145 @@
+#!/usr/bin/env ruby
+
+=begin
+
+# basic organization
+
+* H::Command#start ( #prepare maybe... )
+  * determine if running
+    * registered action
+    * or external command
+  * if yes, pass args to them
+  * if no, call #run
+
+=end
+
+module H
+  class Command
+    class << self
+      def run(args=ARGV.clone, stdin=$stdin)
+        new(args, stdin).tap(&:run)
+      end
+    end
+
+    attr_accessor :original_args, :args, :stdin
+    attr_accessor :action
+
+    def initialize(args=ARGV.clone, stdin=$stdin)
+      @original_args = args.clone
+      @action = args.shift
+      @args = args
+      @stdin = stdin
+    end
+
+    def run
+      case action
+      when nil
+        exit 2
+      # when /n(otes?)?/i
+      #   Note.run(args, stdin)
+      when /cmd/i
+        CmdCommand.run(args)
+      when /path/i
+        system("h-path", *args)
+      else
+        CmdCommand.run(args.unshift('find', 'h-%s' % action))
+        # if Env.h_command?(action)
+        #   system("h-#{action}", *args)
+        # else
+        #   puts format('%s command not found...', action)
+        # end
+      end
+    end
+  end
+
+  def self.run(args=ARGV.clone, stdin=$stdin)
+    Command.run(args, stdin)
+  end
+end
+
+module H
+  class ActionAPI
+    class << self
+      def aliases # action names go here
+        %w{ }
+      end
+
+      def match?(action)
+        aliases.any?{ |command_alias| command_alias[Regexp.new(action, ?i)] }
+      end
+
+      def register_action
+        Hero::Command.register_action(self.class)
+      end
+
+      def run(*args)
+        raise Exception, 'Implement this method in a subclass.'
+      end
+    end
+  end
+end
+
+module H
+  class CmdCommand < ActionAPI
+    class << self
+      def run(args=ARGV.clone, stdin=$stdin)
+        action = args.shift
+
+        case action
+        when 'find', 'f'
+          if args.any?
+            find args.shift.to_s
+          else
+            exit 5
+          end
+        when 'exist', 'exists', 'e'
+          if args.any?
+            exists? args.shift.to_s
+          else
+            exit 8
+          end
+        when nil
+          exit 6
+        else
+          find action
+        end
+      end
+
+      def exists?(name)
+        exit 7 unless name.is_a?(String)
+        nsname = name.gsub(/^(h-)?/, 'h-')
+        fullname = nil
+        p = ENV['PATH'].split(/:/).find do |path|
+          fullname = File.join(path, nsname).gsub(/\/+/, ?/)
+          File.exist?(fullname) && File.file?(fullname) && File.executable?(fullname)
+        end
+
+        if p
+          exit 0
+        else
+          exit 9
+        end
+      end
+
+      def find(name)
+        exit 3 unless name.is_a?(String)
+        nsname = name.gsub(/^(h-)?/, 'h-')
+        fullname = nil
+        p = ENV['PATH'].split(/:/).find do |path|
+          fullname = File.join(path, nsname).gsub(/\/+/, ?/)
+          File.exist?(fullname) && File.file?(fullname) && File.executable?(fullname)
+        end
+
+        if p
+          puts fullname
+          exit 0
+        else
+          exit 4
+        end
+      end
+    end
+  end
+end
+
+H.run
+

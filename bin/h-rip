@@ -1,0 +1,128 @@
+#!/usr/bin/env ruby
+
+require 'awesome_print'
+
+require 'fileutils'
+require 'optparse'
+require 'ostruct'
+require 'mash'
+require 'singleton'
+
+class BaseRipper
+  class << self
+    def register(name)
+      Rippers.register_adapter name, self
+    end
+
+    def matches?
+      false
+    end
+
+    def cd_to(dir)
+      FileUtils.mkdir_p(dir)
+      Dir.chdir(dir)
+    end
+
+    def base_path
+      File.join(ENV['HOME'], 'hero/downloads')
+    end
+
+    def is_default?
+      false
+    end
+  end
+
+  def cd_to(dir)
+    BaseRipper.cd_to dir
+  end
+
+  def base_path
+    BaseRipper.base_path
+  end
+end
+
+class Rippers
+  include Singleton
+
+  class << self
+    def register_adapter(id, kls)
+      adapters.merge! id => kls
+    end
+
+    def adapters
+      instance.adapters
+    end
+
+    def all
+      adapters.values
+    end
+
+    def adapters_path
+      File.join(ENV['HOME'], 'hero', 'plugins', 'rippers')
+    end
+
+    def adapter_pattern
+      format('%s/*.rb', adapters_path)
+    end
+
+    def load_adapters
+      @adapter_files ||= Dir[adapter_pattern].each do |a|
+        load a
+      end
+    end
+  end
+
+  def adapters
+    @adapters ||= {}.to_mash
+  end
+
+  load_adapters
+end
+
+module RipCommand
+  extend self
+
+  attr_accessor :args, :stdinput, :stdoutput
+  def run(args=ARGV.clone, inp=$stdin, out=$stdout)
+    @args, @stdinput, @stdoutput = args, inp, out
+
+    rip
+  end
+
+  def show_error_and_help
+    [
+      adapter_not_found_error,
+      '',
+      help_message,
+    ]
+  end
+
+  def help_message
+    args.options
+  end
+
+  def url
+    @url ||= args[0] || `pbpaste`
+  end
+
+  def rip
+    adapter = Rippers.all.find do |a|
+      args.any?{|arg| a.matches? arg }
+    end
+
+    return show_error_and_help unless adapter
+
+    adapter.rip(args)
+  end
+
+  def adapter_not_found_error
+    'ERROR: URL not accepted by any loaded adapter.'
+  end
+
+  # ...helper methods go here...
+
+end
+
+puts RipCommand.run
+
+# >> PASS:TestD: registering :test_d as an adapter
