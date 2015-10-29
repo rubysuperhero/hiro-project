@@ -130,24 +130,54 @@ class MangaPark < BaseRipper
   def css
     <<-CSS
     <style type="text/css">
+      h1 {
+        padding: 28px 46px;
+        border: solid 2px black;
+        background-color: rgba(20,200,250,0.8);
+        margin-top: 466px;
+      }
+
+      h1:first-child {
+        margin-top: 50px;
+      }
+
+      .chlinks a {
+        margin-left: 10%;
+      }
+
+      .chlinks a:first-child {
+        margin-left: 2%;
+      }
+
       img {
         width: 90%;
-        border: solid 4px pink;
+        border: solid 1px black;
         margin: 20px auto;
+        background-color: rgba(0,0,0,0.15);
+        padding: 10px;
+        display: block;
       }
     </style>
     CSS
   end
 
   def img_tag(file)
-    fmt = '<img src="%s" alt="%s" title="%s" />'
-
     vol,ch,pg,ext = file.split(/[-.]/)
+
+    chapter_links = [
+      '<div class="chlinks">',
+      '<a href="#%s%s">Prev Chapter</a>' % [vol.to_i, ch.to_i - 1],
+      '<a href="#%s%s">Top of Chapter</a>' % [vol.to_i, ch.to_i],
+      '<a href="#%s%s">Next Chapter</a>' % [vol.to_i, ch.to_i + 1],
+      '</div>',
+    ].join
+    fmt = chapter_links + '<img src="%s" alt="%s" title="%s" />'
+
     if vol != @last_vol || ch != @last_ch
       @last_vol = vol
       @last_ch = ch
 
-      fmt = format('<br/><h1>v%s ch%s</h1><br/>%s%s', vol.to_i, ch.to_i, "\n", fmt)
+      fmt = format('<br/><h1 id="%s%s">v%s ch%s</h1><br/>%s%s', vol.to_i, ch.to_i, vol.to_i, ch.to_i, "\n", fmt)
     end
 
     format(fmt, file, file, file)
