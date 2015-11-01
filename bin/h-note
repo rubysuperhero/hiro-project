@@ -1465,9 +1465,9 @@ module Hero
       case command
       when 'open'
         if args.count > 3
-          system('vim', *args.map{|filename| format('%s.md', filename) })
+          system('vim', *args.map{|filename| format('index/%s.md', filename) })
         else
-          system('vim', '-O', *args.map{|filename| format('%s.md', filename) })
+          system('vim', '-O', *args.map{|filename| format('index/%s.md', filename) })
         end
         CliTasks::Commands.rebuild
         return
