@@ -1,3 +1,58 @@
 ---
-stories: {}
-tags: {}
+stories:
+  "/Users/macbookpro/hero/tips/src/144641364200.md": !ruby/object:CliTasks::Note
+    data: |+
+      favor hardlinks over symlinks, when possible.  for example, a symlink can break
+      for any number of reasons, not only is it harder to break a hardlink, but its
+      content is tracked in git like a normal file.
+
+      imagine a simple git repo that contains 2 links to a file, a symlink and a
+      hardlink.  the original file that they both link to is not tracked by the git
+      repo, because it is located in a different folder.  if someone using a different
+      computer clones the repo and the original file doesn't exist, the hardlink will
+      still be identical to the original file, but the symlink will be broken.
+
+      #bash #git #symlink #hardlink #files
+
+    file: "/Users/macbookpro/hero/tips/src/144641364200.md"
+    lines:
+    - favor hardlinks over symlinks, when possible.  for example, a symlink can break
+    - for any number of reasons, not only is it harder to break a hardlink, but its
+    - content is tracked in git like a normal file.
+    - ''
+    - imagine a simple git repo that contains 2 links to a file, a symlink and a
+    - hardlink.  the original file that they both link to is not tracked by the git
+    - repo, because it is located in a different folder.  if someone using a different
+    - computer clones the repo and the original file doesn't exist, the hardlink will
+    - still be identical to the original file, but the symlink will be broken.
+    - ''
+    - "#bash #git #symlink #hardlink #files"
+    - ''
+    tags:
+    - bash
+    - files
+    - git
+    - hardlink
+    - symlink
+    metadata: {}
+    body:
+    - favor hardlinks over symlinks, when possible.  for example, a symlink can break
+    - for any number of reasons, not only is it harder to break a hardlink, but its
+    - content is tracked in git like a normal file.
+    - ''
+    - imagine a simple git repo that contains 2 links to a file, a symlink and a
+    - hardlink.  the original file that they both link to is not tracked by the git
+    - repo, because it is located in a different folder.  if someone using a different
+    - computer clones the repo and the original file doesn't exist, the hardlink will
+    - still be identical to the original file, but the symlink will be broken.
+    - ''
+    - "#bash #git #symlink #hardlink #files"
+    - ''
+    name: favor hardlinks over symlinks, when possible.  for example, a symlink can
+      break
+tags:
+  bash: []
+  files: []
+  git: []
+  hardlink: []
+  symlink: []
