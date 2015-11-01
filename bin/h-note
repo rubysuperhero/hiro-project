@@ -5,7 +5,7 @@ require 'awesome_print'
 require 'fileutils'
 # require 'pry'
 require 'pathname'
-require 'singleton'
+# require 'singleton'
 require 'yaml'
 # require 'active_support'
 # require 'active_support/core_ext'
@@ -38,7 +38,7 @@ end
 
 module CliTasks
   class Configuration
-    include Singleton
+    include OneInstance
 
 
     ## Try this when I have more freetime...
@@ -65,22 +65,71 @@ module CliTasks
       defaults[:path]
     end
 
+    def command_name
+      File.basename(__FILE__)
+    end
+
   private
+
+    def hero_path
+      File.join(ENV['HOME'], 'hero')
+    end
+
+    def git_root
+      `git rev-parse --show-toplevel`.tap do |root|
+        return $? == 0 ? root : Dir.pwd
+      end
+    end
+
+    def default_tips_path
+      File.join(hero_path, 'tips')
+    end
+
+    def default_tasks_path
+      [
+        File.join(git_root, 'tasks'),
+        File.join(hero_path, 'tasks'),
+      ].find do |p|
+        File.exist?(p) && File.directory?(p)
+      end || File.join(git_root, 'tasks')
+    end
+
+    def default_notes_path
+      File.join(hero_path, 'notes')
+    end
+
+    def generate_default_path
+      case command_name
+      when /(h-)?notes?/i
+        default_notes_path
+      when /(h-)?tasks?/i
+        default_tasks_path
+      when /(h-)?tips?/i
+        default_tips_path
+      else
+        ap message: 'Unable to match %s against one of case%ss branches' % [command_name, ?'],
+           command_name: command_name,
+           default_notes: default_notes_path,
+           default_tips: default_tips_path,
+           default_tasks: default_tasks_path
+        default_notes_path
+      end
+    end
 
     def defaults
       {
-        path: '%s/notes' % ENV['HOME'],
+        path: generate_default_path,
       }.with_indifferent_access
     end
   end
-end
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/world.rb
 # ----------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class World
-    include Singleton
+    include OneInstance
     attr_writer :stories, :tags
     attr_accessor :use_index
 
@@ -120,20 +169,43 @@ module CliTasks
       false
     end
 
-    def task_path
-      format('%s/.index', path).tap do |the_path|
-        FileUtils.mkdir_p(the_path) unless File.exist?(the_path)
+    def path
+      @path ||= config.path
+    end
+
+    def subpath(sub=nil)
+      File.join(path, sub).tap do |p|
+        FileUtils.mkdir_p(p) unless File.exist?(p)
       end
+    end
+
+    def ensure_paths
+      [
+        src_path,
+        index_path,
+        tags_path,
+        temp_path,
+      ]
+    end
+
+    def task_path
+      src_path
+    end
+
+    def src_path
+      subpath 'src'
+    end
+
+    def index_path
+      subpath 'index'
+    end
+
+    def tags_path
+      subpath 'tags'
     end
 
     def temp_path
-      format('%s/tempfiles', task_path).tap do |the_path|
-        FileUtils.mkdir_p(the_path) unless File.exist?(the_path)
-      end
-    end
-
-    def path
-      @path ||= config.path
+      subpath 'tmp'
     end
   end
 
@@ -147,7 +219,7 @@ module CliTasks
   def self.stories
     world.stories
   end
-end
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/simple_dsl.rb
 # ---------------------------------------------------------------
@@ -189,34 +261,34 @@ end
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/story_reader.rb
 # -----------------------------------------------------------------
 
-class StoryReader < SimpleDSL
-  def initialize(name, &block)
-    @name = name.split(/\s*\n+\s*/).join(' ')
-    instance_eval &block
-  end
-
-  values :queued, :started, :finished,
-         :accepted, :rejected, :delivered,
-         :weekdays, :weekends
-
-  fields :id, :status, :points, :description, :restricted_to, :created_by
-  groups :assigned_to
-
-  # groups :tags
-  custom :tags do |*args|
-    args.flat_map do |tags|
-      @tags ||= []
-      @tags += tags.to_s.split(/(?<!\\),/).map(&:strip)
+  class StoryReader < SimpleDSL
+    def initialize(name, &block)
+      @name = name.split(/\s*\n+\s*/).join(' ')
+      instance_eval &block
     end
-  end
 
-  custom :comment do |author, body| (@comments ||= []) << {author: author, body: body} end
-end
+    values :queued, :started, :finished,
+          :accepted, :rejected, :delivered,
+          :weekdays, :weekends
+
+    fields :id, :status, :points, :description, :restricted_to, :created_by
+    groups :assigned_to
+
+    # groups :tags
+    custom :tags do |*args|
+      args.flat_map do |tags|
+        @tags ||= []
+        @tags += tags.to_s.split(/(?<!\\),/).map(&:strip)
+      end
+    end
+
+    custom :comment do |author, body| (@comments ||= []) << {author: author, body: body} end
+  end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/story.rb
 # ----------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class Story
     attr_accessor :file
     attr_reader :id, :status, :points, :name, :description, :restricted_to
@@ -261,14 +333,12 @@ module CliTasks
   def stories
     CliTasks.world.stories
   end
-end
-
-extend CliTasks
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/index.rb
 # ----------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class Index
     BASE_INDEX = {
       'stories' => {
@@ -319,13 +389,13 @@ module CliTasks
   def self.index
     @@index ||= Index.read
   end
-end
+# end
 
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/runner.rb
 # -----------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class Runner
     def self.run!(*files)
       world.reset
@@ -365,12 +435,12 @@ module CliTasks
       @world ||= World.instance
     end
   end
-end
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/link_builder.rb
 # -----------------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class LinkBuilder
     class << self
       def all
@@ -392,12 +462,12 @@ module CliTasks
     attr_reader :world
     def initialize
       @world = CliTasks.world
-      @path = @world.path
+      @path = @world.index_path
       Runner.run @world.task_path
     end
 
     def remove_empty_directories
-      Dir[ [@path, '/**/'].join(?/) ].each do |dir|
+      Dir[ [@path, '/**/*/'].join(?/) ].each do |dir|
         next unless File.directory?(dir)
         next if File.basename(dir)[/^[.]/]
         next unless (Dir.entries(dir) - %w{ . .. }).empty?
@@ -413,20 +483,20 @@ module CliTasks
       end
     end
 
-    def create_link(type, dir, story)
+    def create_link(type, dir, story, new_tag=nil)
       type = sanitize(type.dup) if type
       dir = sanitize(dir.to_s.dup) || return
       dir = File.join(type, dir) if type
       dest = File.join(@path, dir)
-      link story, dest
+      link story, dest, new_tag
     end
 
-    def create_tag_link(type, dir, story)
+    def create_tag_link(type, dir, story, new_tag=nil)
       type = sanitize(type.dup) if type
       dir = sanitize_tag(dir.to_s.dup) || return
       dir = File.join(type, dir) if type
       dest = File.join(@path, dir)
-      link story, dest
+      link story, dest, new_tag
     end
 
     def by_metadata
@@ -446,11 +516,14 @@ module CliTasks
 
     def by_tag(opts={ all: true })
       world.tags.each do |tag,stories|
+        new_tag = true
         stories.each do |story|
 
           create_tag_link(nil, tag, story)
           next unless opts.fetch(:all, false)
-          create_tag_link(nil, 'all', story)
+          create_tag_link(nil, 'all', story, new_tag ? tag : nil)
+
+          new_tag = false
         end
       end
     end
@@ -499,7 +572,7 @@ module CliTasks
       String(name.to_s.dup).gsub(/([^\w\/]|_)+/, '_').sub(/^_*/, '').sub(/_*$/, '')
     end
 
-    def append_index(story, dest)
+    def append_index(story, dest, subheading=nil)
       dest += '.md'
       dir = File.dirname(dest)
       FileUtils.mkdir_p(File.expand_path(dir))
@@ -507,6 +580,18 @@ module CliTasks
       add_heading = ! File.exists?(File.expand_path(dest))
 
       File.open(File.expand_path(dest), 'a') do |f|
+
+        if subheading
+          subheading_text = format(' Tag: %s', subheading)
+          f.puts ''
+          f.puts subheading_text
+          f.puts subheading_text.gsub(/./, ?=) + ?=
+          unless add_heading
+            f.puts ''
+            f.puts format(' %-80s |  %s', 'Title', 'Filename')
+            f.puts format('-%-80s | -%s-', format('%80s','').gsub(/./,?-), format('%24s','').gsub(/./,?-))
+          end
+        end
 
         if add_heading
           f.puts ''
@@ -519,8 +604,8 @@ module CliTasks
       end
     end
 
-    def link(story, dest)
-      rv = append_index story, dest
+    def link(story, dest, new_tag=nil)
+      rv = append_index story, dest, new_tag
       return rv
       FileUtils.mkdir_p File.expand_path(dest)
       src = Pathname.new(File.expand_path(story.file))
@@ -529,12 +614,12 @@ module CliTasks
       FileUtils.ln_s src.relative_path_from(Pathname.new(File.expand_path(dest))), File.join(dest, sanitize(story.short_name.to_s.dup))
     end
   end
-end
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/viewer.rb
 # -----------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class Viewer
     attr_accessor :files
     attr_accessor :notes
@@ -689,23 +774,23 @@ module CliTasks
       CliTasks.world
     end
   end
-end
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/version.rb
 # ------------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   VERSION = '0.0.8' unless const_defined? :VERSION
 
   if ENV['CLIT_ENV'] == 'test'
     TEST_VERSION = '0.0.1' unless const_defined? :TEST_VERSION
   end
-end
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/note.rb
 # ---------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class Note
     attr_accessor :data, :lines, :file
     attr_accessor :metadata, :name, :tags
@@ -810,127 +895,14 @@ module CliTasks
   class TaggedNote < Note
     attr_accessor :tag
   end
-end
-
-#p = HeroParser.new ARGV.first || $stdin
-#ap [:@name, :@metadata, :@tags, :@body].map{|x| p.instance_variable_get(x) }, raw: true, index: false
-
-# FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/note.rb
-# ---------------------------------------------------------
-
-module CliTasks
-  class Note
-    attr_accessor :data, :lines, :file
-    attr_accessor :metadata, :name, :tags
-
-    class << self
-      def from_command_line(args=ARGV.clone, stdin=$stdin.clone)
-        notes = [*args].push stdin
-        notes.map &Note.method(:new)
-      end
-
-      def subset(*notes)
-        notes.flatten.flat_map do |note|
-          next note if note.is_a? Note
-          from_file note
-        end
-      end
-
-      def from_string(data, name=nil)
-        Note.new data, name
-      end
-
-      def from_file(name)
-        if File.exist?(name)
-          from_string(IO.read(name), name) unless File.directory?(name)
-        else
-          from_string(name)
-        end
-      end
-
-      def from_stdin(io)
-        return nil if io.tty?
-        from_string io.read
-      end
-
-      def split(data='')
-        notes = (data || '').split(/(\A|\n)name:\s*|^---\s*next.note\s*---\n/i)
-        notes.map do |str|
-          from_string(str)
-        end
-      end
-    end
-
-    def initialize(data='', file=nil)
-      @data = data
-      @file = file
-      @lines = @data.lines.map(&:chomp)
-
-      extract_tags
-      extract_metadata
-      extract_name
-    end
-
-    def id
-      @id ||= File.basename(file).sub(/[.]s?md$/, '')
-    end
-
-    def extract_tags
-      @tags ||= data.scan(/(?<=(?<!\S)#)\w\S*/).sort # should match 'nothis #this #also/this/too'
-    end
-
-    def extract_metadata
-      @metadata ||= lines.take_while do |line|
-        line[metadata_line_regex] # /^\w+:\s*\w|^\s*$/]
-      end.inject({}) do |h,line|
-        md = line.match(/^(\w+)\s*:\s*(\w.*)$/)
-        md &&= Hash[md[1], md[2]]
-        h.merge md || {}
-      end
-    end
-
-    def extract_name
-      @name ||= extract_body.first
-    end
-
-    def short_name
-      extract_name[/^\s*(.{0,79}(?!\S))/]
-    rescue => e
-      puts({file: file}.ai(plain: true, raw: true, index: false))
-    end
-
-    def extract_body
-      @body ||= lines.drop_while do |line|
-        line[metadata_line_regex] # /^[\w\s]+:\s*\w|^\s*$/]
-      end
-    end
-
-    def tagged_notes
-      tags.map do |tag|
-        TaggedNote.new(data, file).tap do |tn|
-          tn.tag = tag
-        end
-      end
-    end
-
-    private
-
-    def metadata_line_regex
-      /^\w+:\s*\w|^\s*$/
-    end
-  end
-
-  class TaggedNote < Note
-    attr_accessor :tag
-  end
-end
+# end
 
 #p = HeroParser.new ARGV.first || $stdin
 #ap [:@name, :@metadata, :@tags, :@body].map{|x| p.instance_variable_get(x) }, raw: true, index: false
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/note_io.rb
 # -----------------------------------------------------------------
-module CliTasks
+# module CliTasks
   # module IO
   module NoteIO
     extend self
@@ -946,12 +918,12 @@ module CliTasks
       io.read
     end
   end
-end
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/project_file.rb
 # -----------------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class ProjectFile
     class << self
       def generate(path=CliTasks.world.path, options={})
@@ -1077,12 +1049,12 @@ module CliTasks
       @world ||= CliTasks.world
     end
   end
-end
+# end
 
 # FILE: /Users/macbookpro/repos/hnotes/lib/clitasks/commands.rb
 # -------------------------------------------------------------
 
-module CliTasks
+# module CliTasks
   class Commands
     class << self
       def commit(message='auto-saving notes')
@@ -1415,12 +1387,13 @@ module CliTasks
       end
     end
   end
+# end
+
+
+# module CliTasks
 end
 
-
-module CliTasks
-end
-
+extend CliTasks
 
 class String
   def split_unescaped(str, opts={}, &block)
