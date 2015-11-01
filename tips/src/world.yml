@@ -50,9 +50,76 @@ stories:
     - ''
     name: favor hardlinks over symlinks, when possible.  for example, a symlink can
       break
+  "/Users/macbookpro/hero/tips/src/144642214000.md": !ruby/object:CliTasks::Note
+    data: |
+      ignore or include hidden files when running a cmd on "everything"
+
+      the difference between passing `.` and `*` to a command when you want to
+      indicate the current directory
+
+      * `.` will usually include dotfiles, since they exist in the current directory
+      * `*`, on the other hand, will match all non-hidden files in the pwd.  if you
+        are in a situation where you want to stick with `*`, but also want dotfiles
+        included in the arg list, add `.*` like this: `* .*`.
+
+      #bash #bash/file-patterns #bash/glob #bash/glob-pattern
+      #zsh #zsh/file-patterns #zsh/glob #zsh/glob-pattern
+      #files #files/glob-patterns #files/hidden-files
+    file: "/Users/macbookpro/hero/tips/src/144642214000.md"
+    lines:
+    - ignore or include hidden files when running a cmd on "everything"
+    - ''
+    - the difference between passing `.` and `*` to a command when you want to
+    - indicate the current directory
+    - ''
+    - "* `.` will usually include dotfiles, since they exist in the current directory"
+    - "* `*`, on the other hand, will match all non-hidden files in the pwd.  if you"
+    - "  are in a situation where you want to stick with `*`, but also want dotfiles"
+    - "  included in the arg list, add `.*` like this: `* .*`."
+    - ''
+    - "#bash #bash/file-patterns #bash/glob #bash/glob-pattern"
+    - "#zsh #zsh/file-patterns #zsh/glob #zsh/glob-pattern"
+    - "#files #files/glob-patterns #files/hidden-files"
+    tags:
+    - bash
+    - bash/file-patterns
+    - bash/glob
+    - bash/glob-pattern
+    - files
+    - files/glob-patterns
+    - files/hidden-files
+    - zsh
+    - zsh/file-patterns
+    - zsh/glob
+    - zsh/glob-pattern
+    metadata: {}
+    body:
+    - ignore or include hidden files when running a cmd on "everything"
+    - ''
+    - the difference between passing `.` and `*` to a command when you want to
+    - indicate the current directory
+    - ''
+    - "* `.` will usually include dotfiles, since they exist in the current directory"
+    - "* `*`, on the other hand, will match all non-hidden files in the pwd.  if you"
+    - "  are in a situation where you want to stick with `*`, but also want dotfiles"
+    - "  included in the arg list, add `.*` like this: `* .*`."
+    - ''
+    - "#bash #bash/file-patterns #bash/glob #bash/glob-pattern"
+    - "#zsh #zsh/file-patterns #zsh/glob #zsh/glob-pattern"
+    - "#files #files/glob-patterns #files/hidden-files"
+    name: ignore or include hidden files when running a cmd on "everything"
 tags:
   bash: []
   files: []
   git: []
   hardlink: []
   symlink: []
+  bash/file-patterns: []
+  bash/glob: []
+  bash/glob-pattern: []
+  files/glob-patterns: []
+  files/hidden-files: []
+  zsh: []
+  zsh/file-patterns: []
+  zsh/glob: []
+  zsh/glob-pattern: []
