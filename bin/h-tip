@@ -986,7 +986,7 @@ module CliTasks
         next if File.basename(f)[/^[.]/]
         if File.directory?(f)
           f = f.sub(/\/*$/, ?/)
-          sublist = file_list(f)
+          sublist = f == dir ? [] : file_list(f)
           label = format(" TAG: %s (%d)", f.sub(/\/+$/, ''), sublist.count)
           labels = [
             format('%s-', label.gsub(/./, ?-)),
@@ -1439,23 +1439,19 @@ module Hero
     def edit_bin
       task_bin = File.realpath(__FILE__)
       task_bin_dir = File.dirname(task_bin)
-      git_dir = `cd #{task_bin_dir}; git rev-parse --show-toplevel`.chomp
-      Dir.chdir(git_dir)
-      # files = []
-      # if args.count > 0
-      #   args.flat_map do |arg|
-      #     files += Dir["{bin,lib}/**/*.rb"].grep Regexp.new('.*' + arg.scan(/./).join('.*'))
-      #   end
-      # end
-      # tempfile = Tempfile.new('note-project')
-      # %x{find bin lib -type f >#{tempfile.path}}
-      # system('vim -O "%s" "bin/%s"' % [tempfile.path, File.basename(task_bin)])   #, task_bin_dir, files.uniq.join(' ')])
-      # tempfile.close
-      # tempfile.unlink
-      CliTasks::ProjectFile.generate(git_dir)
-      Dir.chdir(git_dir)
-      system(format('vim -O "%s" "%s" "%s"', 'project-index', 'bin/note', 'lib/clitasks/commands.rb'))
-      CliTasks::Commands.commit('auto-saving bin/note')
+      if system("cd #{task_bin_dir}; git rev-parse --show-toplevel")
+        git_dir = `cd #{task_bin_dir}; git rev-parse --show-toplevel`.chomp
+        Dir.chdir(git_dir)
+        cmd = format('vim "%s"', task_bin.sub(Regexp.new(git_dir.sub(/[\/]*$/, '/+')),''))
+        ap task_bin: task_bin, git_dir: git_dir, cmd: cmd, gitdirpattern: git_dir.sub(/[\/]*$/, '/+')
+        system(cmd)
+        CliTasks::Commands.commit('auto-saving bin/note')
+      else
+        Dir.chdir(task_bin_dir)
+        cmd = format('vim "%s"', File.basename(task_bin))
+        printf 'cmd => %s\n', cmd
+        system cmd
+      end
       return true
     end
 
