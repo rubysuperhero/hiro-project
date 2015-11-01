@@ -1,0 +1,31 @@
+---
+stories:
+  "/Users/macbookpro/hero/tasks/src/144642129900.md": !ruby/object:CliTasks::Note
+    data: 'maintain an archive of all the cli tools i''ve made, records of everytime
+      i''ve ran it, when and with what args, periodically remind myself of what tools
+      are available and how long it has been since last using it #bash/todo #hero/todo
+      #tools/util-archive'
+    file: "/Users/macbookpro/hero/tasks/src/144642129900.md"
+    lines:
+    - 'maintain an archive of all the cli tools i''ve made, records of everytime i''ve
+      ran it, when and with what args, periodically remind myself of what tools are
+      available and how long it has been since last using it #bash/todo #hero/todo
+      #tools/util-archive'
+    tags:
+    - bash/todo
+    - hero/todo
+    - tools/util-archive
+    metadata: {}
+    body:
+    - 'maintain an archive of all the cli tools i''ve made, records of everytime i''ve
+      ran it, when and with what args, periodically remind myself of what tools are
+      available and how long it has been since last using it #bash/todo #hero/todo
+      #tools/util-archive'
+    name: 'maintain an archive of all the cli tools i''ve made, records of everytime
+      i''ve ran it, when and with what args, periodically remind myself of what tools
+      are available and how long it has been since last using it #bash/todo #hero/todo
+      #tools/util-archive'
+tags:
+  bash/todo: []
+  hero/todo: []
+  tools/util-archive: []

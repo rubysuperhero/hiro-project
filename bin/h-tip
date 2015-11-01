@@ -76,7 +76,7 @@ module CliTasks
     end
 
     def git_root
-      `git rev-parse --show-toplevel`.tap do |root|
+      `git rev-parse --show-toplevel`.chomp.tap do |root|
         return $? == 0 ? root : Dir.pwd
       end
     end
