@@ -1,4 +1,4 @@
-base_path: /Users/macbookpro/hero/tasks
+dirname: /Users/macbookpro/hero/tasks
 
 bash                                               |
   todo                                             | 'index/bash/todo.md'
