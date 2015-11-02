@@ -16,5 +16,5 @@ todo                                               | 'index/todo.md'
  Stories With No Tags
 ----------------------
 
-reorganize either bin/H or its subcmds to be more project-centric; either that, | 'index/../src/144648668400.md.md'
+reorganize either bin/H or its subcmds to be more project-centric; either that, | 'src/144648668400.md'
 

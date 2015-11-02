@@ -572,8 +572,8 @@ module CliTasks
         world.stories.each do |st|
           next if st.tags == nil || st.tags.count > 0
           src = Pathname.new(File.expand_path(st.file))
-          path = src.relative_path_from(Pathname.new(index_path))
-          file.puts format("%-50s | 'index/%s.md'", st.short_name, path)
+          path = src.relative_path_from(Pathname.new(base_path))
+          file.puts format("%-50s | '%s'", st.short_name, path)
         end
 
         file.puts ''
