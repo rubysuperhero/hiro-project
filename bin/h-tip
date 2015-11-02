@@ -523,9 +523,16 @@ module CliTasks
       all_index = File.join(world.index_path, 'all.md')
       FileUtils.rm(all_index)
 
+      last_path = []
       world.tags.each do |tag,stories|
+        this_path = tag.split(?/)
+        path_diff = this_path.drop_while.with_index{|e,i|
+          last_path[i] == e
+        }
+        last_path = this_path
+        indent = '  ' * (this_path.count - path_diff.count)
         File.open(all_index, 'a') do |file|
-          file.puts format('%s.md', tag)
+          file.puts format("%50s | 'index/%s.md'", format('%s%s', indent, path_diff.last), tag)
         end if opts.fetch(:all, false)
 
         new_tag = true
