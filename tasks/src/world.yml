@@ -26,20 +26,141 @@ stories:
       are available and how long it has been since last using it #bash/todo #hero/todo
       #tools/util-archive'
   "/Users/macbookpro/hero/tasks/src/144648668400.md": !ruby/object:CliTasks::Note
-    data: reorganize either bin/H or its subcmds to be more project-centric; either
-      that, or make a binstub for each 'project' (see examples below)
+    data: |+
+      reorganize either bin/H or its subcmds to be more project-centric; either that, or make a binstub for each 'project' (see examples below)
+
+      so here is a set of actions, basically a use case
+      demonstrating how multiple tools will work together to give
+      the developer a simple user experience:
+
+      ```
+      # hero project add [project-name] [project-path]
+
+      $> hero project add hiro ~/repos/hero-project
+
+        Adding a new project to $HOME/hero/projects.yml...
+          name: 'hiro'
+          path: '/Users/unixsuperhero/repos/hero-project'
+
+          Generating binstub...
+            Saving to =>
+              $HOME/hero/bin/hiro
+              $HOME/hero/projects/bin/hiro
+          done
+        done
+
+      $> hiro task save 'release v0.0.1 of the hero project'
+      $> hiro tmux
+
+        Command: tmux new -s hiro -c $HOME/repos/hero-project
+
+      $>
+      ```
+
+
+
     file: "/Users/macbookpro/hero/tasks/src/144648668400.md"
     lines:
     - reorganize either bin/H or its subcmds to be more project-centric; either that,
       or make a binstub for each 'project' (see examples below)
+    - ''
+    - so here is a set of actions, basically a use case
+    - demonstrating how multiple tools will work together to give
+    - 'the developer a simple user experience:'
+    - ''
+    - "```"
+    - "# hero project add [project-name] [project-path]"
+    - ''
+    - "$> hero project add hiro ~/repos/hero-project"
+    - ''
+    - "  Adding a new project to $HOME/hero/projects.yml..."
+    - "    name: 'hiro'"
+    - "    path: '/Users/unixsuperhero/repos/hero-project'"
+    - ''
+    - "    Generating binstub..."
+    - "      Saving to =>"
+    - "        $HOME/hero/bin/hiro"
+    - "        $HOME/hero/projects/bin/hiro"
+    - "    done"
+    - "  done"
+    - ''
+    - "$> hiro task save 'release v0.0.1 of the hero project'"
+    - "$> hiro tmux"
+    - ''
+    - "  Command: tmux new -s hiro -c $HOME/repos/hero-project"
+    - ''
+    - "$>"
+    - "```"
+    - ''
+    - ''
+    - ''
     tags: []
     metadata: {}
     body:
     - reorganize either bin/H or its subcmds to be more project-centric; either that,
       or make a binstub for each 'project' (see examples below)
+    - ''
+    - so here is a set of actions, basically a use case
+    - demonstrating how multiple tools will work together to give
+    - 'the developer a simple user experience:'
+    - ''
+    - "```"
+    - "# hero project add [project-name] [project-path]"
+    - ''
+    - "$> hero project add hiro ~/repos/hero-project"
+    - ''
+    - "  Adding a new project to $HOME/hero/projects.yml..."
+    - "    name: 'hiro'"
+    - "    path: '/Users/unixsuperhero/repos/hero-project'"
+    - ''
+    - "    Generating binstub..."
+    - "      Saving to =>"
+    - "        $HOME/hero/bin/hiro"
+    - "        $HOME/hero/projects/bin/hiro"
+    - "    done"
+    - "  done"
+    - ''
+    - "$> hiro task save 'release v0.0.1 of the hero project'"
+    - "$> hiro tmux"
+    - ''
+    - "  Command: tmux new -s hiro -c $HOME/repos/hero-project"
+    - ''
+    - "$>"
+    - "```"
+    - ''
+    - ''
+    - ''
     name: reorganize either bin/H or its subcmds to be more project-centric; either
       that, or make a binstub for each 'project' (see examples below)
+  "/Users/macbookpro/hero/tasks/src/144649033800.md": !ruby/object:CliTasks::Note
+    data: 'create "project" subcommand which will add name/path to projects.yml and
+      generate a binstub similar to note/task or the heroku binstubs #hero/projects
+      #hero/subcmd #projects #todo #subcmd/create'
+    file: "/Users/macbookpro/hero/tasks/src/144649033800.md"
+    lines:
+    - 'create "project" subcommand which will add name/path to projects.yml and generate
+      a binstub similar to note/task or the heroku binstubs #hero/projects #hero/subcmd
+      #projects #todo #subcmd/create'
+    tags:
+    - hero/projects
+    - hero/subcmd
+    - projects
+    - subcmd/create
+    - todo
+    metadata: {}
+    body:
+    - 'create "project" subcommand which will add name/path to projects.yml and generate
+      a binstub similar to note/task or the heroku binstubs #hero/projects #hero/subcmd
+      #projects #todo #subcmd/create'
+    name: 'create "project" subcommand which will add name/path to projects.yml and
+      generate a binstub similar to note/task or the heroku binstubs #hero/projects
+      #hero/subcmd #projects #todo #subcmd/create'
 tags:
   bash/todo: []
   hero/todo: []
   tools/util-archive: []
+  hero/projects: []
+  hero/subcmd: []
+  projects: []
+  subcmd/create: []
+  todo: []
