@@ -561,6 +561,24 @@ module CliTasks
           new_tag = false
         end
       end
+
+      File.open(all_index, 'a') do |file|
+        file.puts ''
+        file.puts ''
+        file.puts ' Stories With No Tags'
+        file.puts '----------------------'
+        file.puts ''
+
+        world.stories.each do |st|
+          next if st.tags == nil || st.tags.count > 0
+          src = Pathname.new(File.expand_path(st.file))
+          path = src.relative_path_from(Pathname.new(index_path))
+          file.puts format("%-50s | 'index/%s.md'", st.short_name, path)
+        end
+
+        file.puts ''
+
+      end if opts.fetch(:all, false)
     end
 
     def by_status
