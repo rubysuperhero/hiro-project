@@ -25,6 +25,20 @@ stories:
       i''ve ran it, when and with what args, periodically remind myself of what tools
       are available and how long it has been since last using it #bash/todo #hero/todo
       #tools/util-archive'
+  "/Users/macbookpro/hero/tasks/src/144648668400.md": !ruby/object:CliTasks::Note
+    data: reorganize either bin/H or its subcmds to be more project-centric; either
+      that, or make a binstub for each 'project' (see examples below)
+    file: "/Users/macbookpro/hero/tasks/src/144648668400.md"
+    lines:
+    - reorganize either bin/H or its subcmds to be more project-centric; either that,
+      or make a binstub for each 'project' (see examples below)
+    tags: []
+    metadata: {}
+    body:
+    - reorganize either bin/H or its subcmds to be more project-centric; either that,
+      or make a binstub for each 'project' (see examples below)
+    name: reorganize either bin/H or its subcmds to be more project-centric; either
+      that, or make a binstub for each 'project' (see examples below)
 tags:
   bash/todo: []
   hero/todo: []
