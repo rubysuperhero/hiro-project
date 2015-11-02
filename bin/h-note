@@ -466,6 +466,18 @@ module CliTasks
       Runner.run @world.task_path
     end
 
+    def base_path
+      world.path
+    end
+
+    def index_path
+      world.index_path
+    end
+
+    def src_path
+      world.src_path
+    end
+
     def remove_empty_directories
       Dir[ [@path, '/**/*/'].join(?/) ].each do |dir|
         next unless File.directory?(dir)
@@ -623,7 +635,7 @@ module CliTasks
         end
 
         src = Pathname.new(File.expand_path(story.file))
-        f.puts format(' %-80s |  %s%s%s', story.short_name[0,80], ?', src.relative_path_from(Pathname.new(File.expand_path(@path))), ?')
+        f.puts format(' %-80s |  %s%s%s', story.short_name[0,80], ?', src.relative_path_from(Pathname.new(File.expand_path(base_path))), ?')
       end
     end
 
