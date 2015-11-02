@@ -1,3 +1,6 @@
-todo                                               | 'index/bash/todo.md'
-todo                                               | 'index/hero/todo.md'
-util-archive                                       | 'index/tools/util-archive.md'
+bash                                               |
+  todo                                             | 'index/bash/todo.md'
+hero                                               |
+  todo                                             | 'index/hero/todo.md'
+tools                                              |
+  util-archive                                     | 'index/tools/util-archive.md'

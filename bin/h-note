@@ -532,6 +532,10 @@ module CliTasks
         last_path = this_path
         indent = '  ' * (this_path.count - path_diff.count)
         File.open(all_index, 'a') do |file|
+          path_diff[0..-2].each do |tagdir|
+            file.puts format("%-50s |", format('%s%s', indent, tagdir))
+            indent += '  '
+          end
           file.puts format("%-50s | 'index/%s.md'", format('%s%s', indent, path_diff.last), tag)
         end if opts.fetch(:all, false)
 
