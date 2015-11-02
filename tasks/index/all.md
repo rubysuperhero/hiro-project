@@ -1,3 +1,5 @@
+base_path: /Users/macbookpro/hero/tasks
+
 bash                                               |
   todo                                             | 'index/bash/todo.md'
 hero                                               |
