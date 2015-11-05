@@ -155,6 +155,18 @@ stories:
     name: 'create "project" subcommand which will add name/path to projects.yml and
       generate a binstub similar to note/task or the heroku binstubs #hero/projects
       #hero/subcmd #projects #todo #subcmd/create'
+  "/Users/macbookpro/hero/tasks/src/144671627900.md": !ruby/object:CliTasks::Note
+    data: 'hello world testing one two #three/four #hello/world/this/is/testing'
+    file: "/Users/macbookpro/hero/tasks/src/144671627900.md"
+    lines:
+    - 'hello world testing one two #three/four #hello/world/this/is/testing'
+    tags:
+    - hello/world/this/is/testing
+    - three/four
+    metadata: {}
+    body:
+    - 'hello world testing one two #three/four #hello/world/this/is/testing'
+    name: 'hello world testing one two #three/four #hello/world/this/is/testing'
 tags:
   bash/todo: []
   hero/todo: []
@@ -164,3 +176,5 @@ tags:
   projects: []
   subcmd/create: []
   todo: []
+  hello/world/this/is/testing: []
+  three/four: []
