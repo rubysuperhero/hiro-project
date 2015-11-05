@@ -13,6 +13,13 @@ projects                                           | 'index/projects.md'
 subcmd                                             |
   create                                           | 'index/subcmd/create.md'
 todo                                               | 'index/todo.md'
+hello                                              |
+  world                                            |
+    this                                           |
+      is                                           |
+        testing                                    | 'index/hello/world/this/is/testing.md'
+three                                              |
+  four                                             | 'index/three/four.md'
 
 
  Stories With No Tags

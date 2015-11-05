@@ -167,6 +167,18 @@ stories:
     body:
     - 'hello world testing one two #three/four #hello/world/this/is/testing'
     name: 'hello world testing one two #three/four #hello/world/this/is/testing'
+  "/Users/macbookpro/hero/tasks/src/144671756100.md": !ruby/object:CliTasks::Note
+    data: 'hello world one #one #tow/three/four'
+    file: "/Users/macbookpro/hero/tasks/src/144671756100.md"
+    lines:
+    - 'hello world one #one #tow/three/four'
+    tags:
+    - one
+    - tow/three/four
+    metadata: {}
+    body:
+    - 'hello world one #one #tow/three/four'
+    name: 'hello world one #one #tow/three/four'
 tags:
   bash/todo: []
   hero/todo: []
@@ -178,3 +190,5 @@ tags:
   todo: []
   hello/world/this/is/testing: []
   three/four: []
+  one: []
+  tow/three/four: []
