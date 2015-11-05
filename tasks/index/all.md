@@ -20,6 +20,10 @@ hello                                              |
         testing                                    | 'index/hello/world/this/is/testing.md'
 three                                              |
   four                                             | 'index/three/four.md'
+one                                                | 'index/one.md'
+tow                                                |
+  three                                            |
+    four                                           | 'index/tow/three/four.md'
 
 
  Stories With No Tags
