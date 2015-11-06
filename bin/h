@@ -79,9 +79,16 @@ module H
         system("h-path", *args)
       when /edit/i
         cmd = args.shift
-        p = `which h-#{cmd}`.chomp
-        system('vim', p)
-        exit 0
+        if system(format('which h-%s', cmd))
+          p = `which h-#{cmd}`.chomp
+          system('vim', p)
+          exit 0
+        elsif system(format('which %s', cmd))
+          p = `which #{cmd}`.chomp
+          system('vim', p)
+          exit 0
+        end
+        exit 1
       else
         if Env.h_command?(subcommand)
           puts '%s command was found' % subcommand
