@@ -77,11 +77,6 @@ module H
       #   Note.run(args, stdin)
       when /path/i
         system("h-path", *args)
-      when /edit/i
-        cmd = args.shift
-        p = `which h-#{cmd}`.chomp
-        system('vim', p)
-        exit 0
       else
         if Env.h_command?(subcommand)
           puts '%s command was found' % subcommand

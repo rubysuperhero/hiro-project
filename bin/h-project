@@ -1,0 +1,224 @@
+#!/usr/bin/env ruby
+
+# Subcommands are defined at the bottom
+# Each subcommand has its own class
+# see: Help
+
+require 'awesome_print'
+require 'optparse'
+require 'yaml'
+require 'fileutils'
+require 'erb'
+
+class Options
+  def set(k,v)
+    k = k.to_sym
+    singleton_class.class_eval{ attr_accessor k }
+    instance_variable_set("@#{k}", v)
+  end
+
+  def method_missing(*asdf)
+    false
+  end
+end
+
+class SubCommand
+  module Registration
+    def register(klass)
+      SubCommand.register klass
+    end
+  end
+
+  class << self
+    attr_accessor :commands
+    def process
+      commands.find{|cmd|
+        cmd.matches?(MainCommand.subcmd)
+      }.run
+    end
+
+    def register(klass)
+      @commands ||= []
+      @commands.push(klass)
+    end
+
+    def matches?(subcmd)
+      possible_matches.include?(subcmd)
+    end
+
+    def possible_matches
+      %w{ }
+    end
+
+    def run
+      new.run
+    end
+  end
+
+  attr_accessor :args, :stdinput, :stdoutput
+  attr_accessor :options
+
+  def initialize
+    @args = MainCommand.args
+    @stdinput = MainCommand.stdinput
+    @stdoutput = MainCommand.stdoutput
+    @options = MainCommand.options
+  end
+
+  def cmd
+    self.class.to_s.downcase
+  end
+
+  def run
+    raise Exception, 'not implemented'
+  end
+
+  def debug
+    ap cmd: cmd,
+      args: args,
+      stdinput: stdinput,
+      stdoutput: stdoutput,
+      options: options
+  end
+end
+
+module MainCommand
+  extend self
+
+  attr_accessor :args, :stdinput, :stdoutput
+  attr_accessor :options
+  def run(args=ARGV.clone, inp=$stdin, out=$stdout)
+    @args, @stdinput, @stdoutput = args, inp, out
+    @options = Options.new
+
+    parse_options
+
+    SubCommand.process
+  end
+
+  def subcmd
+    @subcmd ||= args.shift
+  end
+
+  def parse_options
+    args.options { |opts|
+      opts.on('-h', '--help', 'print this message') do
+        @options.set(:help, true)
+      end
+    }.parse!
+  end
+end
+
+class Projects
+  class << self
+    attr_accessor :file, :data, :yaml
+
+    def load
+      @load ||= begin
+        @file = File.join(ENV['HOME'], 'hero', 'projects.yml')
+        @yaml = IO.read(file)
+        @data = YAML.load(@yaml)
+      end
+    end
+
+    def all
+      load.keys
+    end
+  end
+end
+
+class AddProject < SubCommand
+  extend SubCommand::Registration
+  register self
+
+  class << self
+    def possible_matches
+      %w{ a add }
+    end
+  end
+
+  def cmd
+    'add'
+  end
+
+  def run
+    puts args.options
+  end
+end
+
+class List < SubCommand
+  extend SubCommand::Registration
+  register self
+
+  class << self
+    def possible_matches
+      %w{ l list }
+    end
+  end
+
+  def cmd
+    'list'
+  end
+
+  def run
+    ap projects: Projects.all
+  end
+end
+
+class Help < SubCommand
+  extend SubCommand::Registration
+  register self
+
+  class << self
+    def possible_matches
+      %w{ h help } + [nil]
+    end
+  end
+
+  def cmd
+    'help'
+  end
+
+  def run
+    puts args.options
+  end
+end
+
+class GenerateBinstubs < SubCommand
+  extend SubCommand::Registration
+  register self
+
+  class << self
+    def possible_matches
+      %w{ g gen generate binstubs stubs shims }
+    end
+  end
+
+  def cmd
+    'generate'
+  end
+
+  def template
+    @template ||= IO.read(File.join(ENV['HOME'], 'hero', 'binstubs', 'project.erb'))
+  end
+
+  def projects_dir
+    File.join(ENV['HOME'], 'hero', 'projects').tap do |pdir|
+      FileUtils.mkdir_p(pdir)
+    end
+  end
+
+  def run
+    Projects.all.each do |project|
+      cmd = File.join(projects_dir, format('p%s', project))
+      path = Projects.data[project]['path']
+      binstub = ERB.new(template).result(binding)
+      IO.write(cmd, binstub)
+      puts `chmod +x #{cmd}`
+      puts `ls -l #{cmd}`
+    end
+  end
+end
+
+MainCommand.run
+

@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'awesome_print'
+require 'ostruct'
+
+module MainCommand
+  extend self
+
+  attr_accessor :args, :stdinput, :stdoutput
+  attr_accessor :piped_data
+  attr_accessor :special_options
+  def run(args=ARGV.clone, input=$stdin, output=$stdout)
+    @args, @stdinput, @stdoutput = args, input, output
+
+    subcmd = @args.shift
+
+    case subcmd
+    when 'help'
+      print_help
+    when 'postgres'
+      exec 'postgresfix'
+    when 'wifi'
+      exec 'wifi_fix'
+    else
+      print_help
+    end
+    # parse_options
+
+  end
+
+  def print_help
+    puts
+    puts 'possible subcommands:'
+    puts '---------------------'
+    puts
+    puts 'postgres'
+    puts 'pg'
+    puts
+    puts 'wifi'
+    puts 'net'
+    puts
+    exit 1
+  end
+
+  def parse_options
+    @special_options ||= []
+    i = 0
+    last_arg = :not_started
+    same_arg = 0
+    while i < args.length
+      sopts = []
+      next i += 1 unless (arg=args[i]).strip[/:$/]
+      if last_arg == arg
+        same_arg += 1
+      else
+        same_arg = 0
+        last_arg = arg
+      end
+
+      break if same_arg > 3
+
+      sopts << arg
+      sopts += args[(i+1)..-1].take_while do |sarg|
+        not sarg.strip[/:$/]
+      end
+      @special_options.push sopts
+      args.slice!(i, sopts.length)
+    end
+  end
+
+  def options
+    @options ||= OpenStruct.new.tap do |opts|
+      # default options go here
+      # or pass them to #new as a hash
+
+      opts.show_help = false
+    end
+  end
+end
+
+puts MainCommand.run
+

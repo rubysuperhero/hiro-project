@@ -191,6 +191,17 @@ stories:
     body:
     - 'hello world one #one #tow/three/four'
     name: 'hello world one #one #tow/three/four'
+  "/Users/macbookpro/hero/tasks/src/144684769000.md": !ruby/object:CliTasks::Note
+    data: "#todo go thru zsh history to find frequently used git/shell recipes"
+    file: "/Users/macbookpro/hero/tasks/src/144684769000.md"
+    lines:
+    - "#todo go thru zsh history to find frequently used git/shell recipes"
+    tags:
+    - todo
+    metadata: {}
+    body:
+    - "#todo go thru zsh history to find frequently used git/shell recipes"
+    name: "#todo go thru zsh history to find frequently used git/shell recipes"
 tags:
   bash/todo: []
   hero/todo: []

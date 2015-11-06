@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require 'awesome_print'
+
+module H
+  module Experiment
+    extend self
+
+    def test(args=ARGV.clone, inp=$stdin, out=$stdout)
+      cmd = args.join(' ')
+      file = []
+      file << '#!/bin/bash'
+      file << ''
+      file << "for a in #{inp.readlines.map(&:chomp).join(' ')}"
+      file << "do"
+      file << ''
+      file << 'done'
+      file << ''
+      stamp = Time.now.strftime('%Y%m%d%H%M%S')
+      tmpfile = 'tmpfile.%s' % stamp
+      IO.write(tmpfile, file.join("\n"))
+      system('vim', tmpfile, '+/do/+1')
+      puts `cat -n #{tmpfile}`
+      File.unlink(tmpfile)
+      # inp.readlines.map(&:chomp).each do |line|
+      #   puts
+
+      #   if cmd[/__/]
+      #     printf "before => '%s'\n", cmd
+      #     printf "after => '%s'\n", cmd.gsub(/__/, line)
+      #     puts `#{cmd.gsub(/__/, line)}`
+      #   else
+      #     printf "cmd => '%s'\n", "#{cmd} #{line}"
+      #     puts `#{cmd} #{line}`
+      #   end
+
+      #   puts
+      # end
+    end
+  end
+end
+
+H::Experiment.test # => "this is where the test code goes"
+

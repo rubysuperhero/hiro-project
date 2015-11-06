@@ -1,0 +1,190 @@
+#!/usr/bin/env ruby
+
+# if tmux ls | egrep -i copley; then
+#   tmux a -t copley
+# else
+#   tmux new -s copley -c ~/repos/copley/www "$@"
+# fi
+
+require 'optparse'
+require 'awesome_print'
+require 'ostruct'
+
+module MainCommand
+  extend self
+
+  COPLEY_HOME='/Users/macbookpro/hero/distro/h'
+
+  attr_accessor :args, :stdinput, :stdoutput
+  attr_accessor :piped_data
+  attr_accessor :special_options
+  attr_accessor :pwd, :original_pwd
+
+  def run(args=ARGV.clone, input=$stdin, output=$stdout)
+    @args, @stdinput, @stdoutput = args, input, output
+
+    @original_pwd = Dir.pwd
+    Dir.chdir(COPLEY_HOME)
+    @pwd = Dir.pwd
+
+    parse_options
+
+    subcommand = args.shift
+
+    case subcommand
+    when 'refresh'
+      update_start_file
+    when 'dir', 'cdto', 'cd', 'path', 'home'
+      Dir.chdir COPLEY_HOME
+      printf '%s', COPLEY_HOME
+    when 'run'
+      system(* args)
+    when ?t, 'tmux'
+      if system('tmux ls | egrep -i copley')
+        system(* %w{tmux a -t copley})
+      else
+        system(* ("tmux new -s copley -c #{ENV['HOME']}/repos/copley/www " + @args.join(' ')).split(' '))
+      end
+    when ?i, 'issues'
+      system(* %w{ghi list})
+    when 'mki', 'mkissue', 'makei', 'makeissue', 'make-issue'
+      system(* build_github_issues_command)
+    when 'label', 'labels', 'listlabels'
+      system(* %w{ghi label --list}, *args)
+    else
+      puts(sprintf 'Unknown Subcommand: %s', subcommand)
+    end
+
+    puts
+  end
+
+  def update_start_file
+    File.open('start', 'w+') do |file|
+      file.puts
+      file.puts '# git status'
+      files = `git status -s`.lines.map(&:chomp)
+      max_length = files.map{|f|
+        f.sub(/^..\s(?:.* -> )?/, '')
+      }.max
+      start_files = files.map do |f|
+        replaced = f[/^..\s(?:.* -> )?/]
+        format("%-#{max_length}s  # %-s", f.sub(/^(..) (.* -> )?/, 'git add --all '), replaced)
+      end
+      file.puts start_files
+      file.puts
+      file.puts '# project files'
+      file_list = `git ls-files`
+      file.puts file_list
+      file.puts
+    end
+  end
+
+  def build_github_issues_command
+    cmd = []
+    values = []
+    labels = nil
+    assign_to = nil
+    milestone = 1
+    claim = false
+    special_options.each do |opt|
+      subcmd = opt.shift
+      case subcmd
+      when ':claim'
+        claim = true
+      when 'assign:', 'assign_to:'
+        assign_to = opt.shift
+      when 'labels:', 'tags:'
+        labels = opt.map(&:strip).map{|o| o.sub(/,?$/,'') }.join(?,)
+      when 'milestone:'
+        milestone = opt.first
+      end
+    end
+
+    formatted_cmd = []
+    ## issue name
+    # cmd << 'ghi open -m "%s"'
+    # values << @args.join(' ')
+
+    formatted_cmd << format('ghi open -m "%s"', @args.join(' '))
+
+    ## milestone id
+    # cmd << '-M %d'
+    # values << milestone
+
+    formatted_cmd << format('-M %d', milestone)
+
+    ## labels/tags
+    # unless labels == nil
+    #   cmd << '-L %s'
+    #   values << labels
+    # end
+
+    formatted_cmd << format('-L %s', labels) unless labels == nil
+
+    ## assign to
+    # unless assign_to == nil
+    #   cmd << '--assign %s'
+    #   values << assign_to
+    # end
+
+    formatted_cmd << format('--assign %s', assign_to) unless assign_to == nil
+
+    formatted_cmd << format('--claim') if claim == true
+
+    return formatted_cmd.join(' ')
+
+    ## --- nothing is ran below this line ---
+
+    cmd = [cmd.join(' ')] + values
+    return format(* cmd)
+    message = @args.join(' ')
+    ghi = 'ghi open -m "%s" -M %d'
+    ghi += ' -L %s' unless labels == nil
+    ghi += ' --assign %s' unless assign_to == nil
+    format(ghi, message, milestone, labels)
+  end
+
+  def parse_options
+    @special_options ||= []
+    i = 0
+    last_arg = :not_started
+    same_arg = 0
+    while i < args.length
+      sopts = []
+
+      next i += 1 unless (arg=args[i]).strip[/:$/] || (arg=args[i]).strip[/:claim/i]
+
+      if last_arg == arg
+        same_arg += 1
+      else
+        same_arg = 0
+        last_arg = arg
+      end
+
+      break if same_arg > 3
+
+      sopts << arg
+
+      if arg != ':claim'
+        sopts += args[(i+1)..-1].take_while do |sarg|
+          not (sarg.strip[/:$/] || sarg.strip[/^:claim/])
+        end
+      end
+
+      @special_options.push sopts
+      args.slice!(i, sopts.length)
+    end
+  end
+
+  def options
+    @options ||= OpenStruct.new.tap do |opts|
+      # default options go here
+      # or pass them to #new as a hash
+
+      opts.show_help = false
+    end
+  end
+end
+
+puts MainCommand.run
+

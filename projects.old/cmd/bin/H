@@ -1,0 +1,191 @@
+#!/usr/bin/env ruby
+
+# 3rd party requirements
+require 'awesome_print'
+require 'pry'
+require 'optparse'
+require 'singleton'
+require 'mkmf'
+
+class Hero
+  HERO_PATH = File.join(ENV['HOME'], 'hero')
+
+  def run(args=ARGV.clone, stdin=$stdin)
+    Command.run(args, stdin)
+  end
+end
+
+class Hero
+  class Command
+    class << self
+      def run(args=ARGV.clone, stdin=$stdin)
+        new(args, stdin).tap(&:run)
+      end
+
+      def subcommand_prefixes
+        %w{ h }
+      end
+
+      def register_subcommand(kls)
+        subcommands << kls
+      end
+
+      def subcommands
+        @@subcommands ||= []
+      end
+    end
+
+    attr_accessor :original_args, :args, :stdin
+    attr_accessor :subcommand
+
+    def initialize(args=ARGV.clone, stdin=$stdin)
+      @original_args = args.clone
+      @args = args
+      @stdin = stdin
+    end
+
+    def subcommands
+      self.class.subcommands
+    end
+
+    def external_subcommand?
+      extcmd = self.class.subcommand_prefixes.find do |prefix|
+        find_executable [prefix, args.first].join(?-)
+      end
+
+      return false unless extcmd
+
+      @external_subcommand = [extcmd, args.shift].join(?-)
+      true
+    end
+
+    def internal_subcommand?
+      @handler = subcommands.find do |subcmd|
+        subcmd.matches?(args.first)
+      end
+
+      return false unless @handler
+
+      args.shift
+      true
+    end
+
+    def process
+      if external_subcommand?
+        # pass args and stdin to @external_subcommand
+      elsif internal_subcommand?
+        @handler.run(args, stdin)
+      else
+        run
+      end
+    end
+
+    def run
+      case subcommand
+      # when /n(otes?)?/i
+      #   Note.run(args, stdin)
+      when /path/i
+        system("h-path", *args)
+      else
+        if Env.h_command?(subcommand)
+          system("h-#{subcommand}", *args)
+        else
+          puts format('%s command not found...', subcommand)
+        end
+      end
+    end
+  end
+end
+# H command requirements
+
+# require 'h/config'
+module H
+  class Config
+    include Singleton
+
+    attr_accessor :original_path, :path
+    attr_accessor :hero_path
+
+    def initialize(options={})
+      @original_path = Dir.pwd
+      @path = options[:path] || Dir.pwd
+      @hero_path = format('%s/hero', ENV['HOME'])
+    end
+  end
+
+  def self.config
+    @config ||= Config.instance
+  end
+end
+
+
+
+
+# require 'h/env'
+module H
+  module Env
+    extend self
+
+    def path
+      ENV['PATH']
+    end
+
+    def h_command?(bin)
+      find_executable "h-#{bin}"
+    end
+  end
+
+  def self.env
+    Env
+  end
+end
+
+
+
+
+# require 'h/command'
+module H
+  class Command
+    class << self
+      def run(args=ARGV.clone, stdin=$stdin)
+        new(args, stdin).tap(&:run)
+      end
+    end
+
+    attr_accessor :original_args, :args, :stdin
+    attr_accessor :subcommand
+
+    def initialize(args=ARGV.clone, stdin=$stdin)
+      @original_args = args.clone
+      @subcommand = args.shift
+      @args = args
+      @stdin = stdin
+    end
+
+    def run
+      case subcommand
+      # when /n(otes?)?/i
+      #   Note.run(args, stdin)
+      when /path/i
+        system("h-path", *args)
+      else
+        if Env.h_command?(subcommand)
+          system("h-#{subcommand}", *args)
+        else
+          puts format('%s command not found...', subcommand)
+        end
+      end
+    end
+  end
+
+  def self.run(args=ARGV.clone, stdin=$stdin)
+    Command.run(args, stdin)
+  end
+end
+
+
+module H
+end
+
+H.run
+
