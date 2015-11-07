@@ -26,4 +26,5 @@ todo                                               |
  Stories With No Tags
 ----------------------
 
+create a project all subcommand for running a command on all the projects | '/Users/macbookpro/hero/tasks/src/144692264900.md'
 
