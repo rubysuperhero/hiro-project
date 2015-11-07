@@ -243,6 +243,41 @@ stories:
     - ''
     - "#todo/training"
     name: prepare a lesson about writing pseudocode and making real code out of it
+  "/Users/macbookpro/hero/tasks/src/144688952700.md": !ruby/object:CliTasks::Note
+    data: |
+      make a new h command that can list all subcmds and extensions because it loads
+      them instead of firing a new process
+
+      there are so many benefits to this.
+
+      * it is the easiest way to pass data piped in from one class to another
+
+      #hero/todo #todo/hero
+    file: "/Users/macbookpro/hero/tasks/src/144688952700.md"
+    lines:
+    - make a new h command that can list all subcmds and extensions because it loads
+    - them instead of firing a new process
+    - ''
+    - there are so many benefits to this.
+    - ''
+    - "* it is the easiest way to pass data piped in from one class to another"
+    - ''
+    - "#hero/todo #todo/hero"
+    tags:
+    - hero/todo
+    - todo/hero
+    metadata: {}
+    body:
+    - make a new h command that can list all subcmds and extensions because it loads
+    - them instead of firing a new process
+    - ''
+    - there are so many benefits to this.
+    - ''
+    - "* it is the easiest way to pass data piped in from one class to another"
+    - ''
+    - "#hero/todo #todo/hero"
+    name: make a new h command that can list all subcmds and extensions because it
+      loads
 tags:
   bash/todo: []
   hero/todo: []
@@ -254,3 +289,4 @@ tags:
   todo: []
   hero/training: []
   todo/training: []
+  todo/hero: []
