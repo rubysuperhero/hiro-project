@@ -19,6 +19,10 @@ zsh                                                | 'index/zsh.md'
 git                                                |
   branch                                           | 'index/git/branch.md'
   symbolic-ref                                     | 'index/git/symbolic-ref.md'
+vim                                                | 'index/vim.md'
+  start                                            | 'index/vim/start.md'
+  buffers                                          | 'index/vim/buffers.md'
+  commands                                         | 'index/vim/commands.md'
 
 
  Stories With No Tags

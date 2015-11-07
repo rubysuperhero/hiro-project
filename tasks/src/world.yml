@@ -278,6 +278,16 @@ stories:
     - "#hero/todo #todo/hero"
     name: make a new h command that can list all subcmds and extensions because it
       loads
+  "/Users/macbookpro/hero/tasks/src/144689095700.md": !ruby/object:CliTasks::Note
+    data: "/Users/macbookpro/hero/tasks/tmp/144689063900.md"
+    file: "/Users/macbookpro/hero/tasks/src/144689095700.md"
+    lines:
+    - "/Users/macbookpro/hero/tasks/tmp/144689063900.md"
+    tags: []
+    metadata: {}
+    body:
+    - "/Users/macbookpro/hero/tasks/tmp/144689063900.md"
+    name: "/Users/macbookpro/hero/tasks/tmp/144689063900.md"
 tags:
   bash/todo: []
   hero/todo: []
