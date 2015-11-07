@@ -321,6 +321,16 @@ stories:
       experiments) #todo/hero #hero/todo'
     name: 'make a directory for reusable ruby libs or shell scripts (normally start
       as experiments) #todo/hero #hero/todo'
+  "/Users/macbookpro/hero/tasks/src/144692264900.md": !ruby/object:CliTasks::Note
+    data: create a project all subcommand for running a command on all the projects
+    file: "/Users/macbookpro/hero/tasks/src/144692264900.md"
+    lines:
+    - create a project all subcommand for running a command on all the projects
+    tags: []
+    metadata: {}
+    body:
+    - create a project all subcommand for running a command on all the projects
+    name: create a project all subcommand for running a command on all the projects
 tags:
   bash/todo: []
   hero/todo: []
