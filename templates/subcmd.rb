@@ -19,66 +19,6 @@ class Options
   end
 end
 
-class SubCommand
-  module Registration
-    def register(klass)
-      SubCommand.register klass
-    end
-  end
-
-  class << self
-    attr_accessor :commands
-    def process
-      commands.find{|cmd|
-        cmd.matches?(MainCommand.subcmd)
-      }.run
-    end
-
-    def register(klass)
-      @commands ||= []
-      @commands.push(klass)
-    end
-
-    def matches?(subcmd)
-      possible_matches.include?(subcmd)
-    end
-
-    def possible_matches
-      %w{ }
-    end
-
-    def run
-      new.run
-    end
-  end
-
-  attr_accessor :args, :stdinput, :stdoutput
-  attr_accessor :options
-
-  def initialize
-    @args = MainCommand.args
-    @stdinput = MainCommand.stdinput
-    @stdoutput = MainCommand.stdoutput
-    @options = MainCommand.options
-  end
-
-  def cmd
-    self.class.to_s.downcase
-  end
-
-  def run
-    raise Exception, 'not implemented'
-  end
-
-  def debug
-    ap cmd: cmd,
-      args: args,
-      stdinput: stdinput,
-      stdoutput: stdoutput,
-      options: options
-  end
-end
-
 module MainCommand
   extend self
 
@@ -90,7 +30,22 @@ module MainCommand
 
     parse_options
 
-    SubCommand.process
+    process
+  end
+
+  def process
+    case subcmd
+    when 'h', 'help'
+      run_help
+    else
+      raise Exception, format('%s not found', subcmd)
+      exit 1
+    end
+    exit 0
+  end
+
+  def run_help
+    puts args.options
   end
 
   def subcmd
@@ -103,25 +58,6 @@ module MainCommand
         @options.set(:help, true)
       end
     }.parse!
-  end
-end
-
-class Help < SubCommand
-  extend SubCommand::Registration
-  register self
-
-  class << self
-    def possible_matches
-      %w{ h help } + [nil]
-    end
-  end
-
-  def cmd
-    'help'
-  end
-
-  def run
-    puts args.options
   end
 end
 

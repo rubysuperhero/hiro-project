@@ -57,7 +57,7 @@ stories:
       $>
       ```
 
-
+      #hero/h #hero/todo #todo/hero
 
     file: "/Users/macbookpro/hero/tasks/src/144648668400.md"
     lines:
@@ -92,9 +92,12 @@ stories:
     - "$>"
     - "```"
     - ''
+    - "#hero/h #hero/todo #todo/hero"
     - ''
-    - ''
-    tags: []
+    tags:
+    - hero/h
+    - hero/todo
+    - todo/hero
     metadata: {}
     body:
     - reorganize either bin/H or its subcmds to be more project-centric; either that,
@@ -128,7 +131,7 @@ stories:
     - "$>"
     - "```"
     - ''
-    - ''
+    - "#hero/h #hero/todo #todo/hero"
     - ''
     name: reorganize either bin/H or its subcmds to be more project-centric; either
       that, or make a binstub for each 'project' (see examples below)
@@ -278,20 +281,12 @@ stories:
     - "#hero/todo #todo/hero"
     name: make a new h command that can list all subcmds and extensions because it
       loads
-  "/Users/macbookpro/hero/tasks/src/144689095700.md": !ruby/object:CliTasks::Note
-    data: "/Users/macbookpro/hero/tasks/tmp/144689063900.md"
-    file: "/Users/macbookpro/hero/tasks/src/144689095700.md"
-    lines:
-    - "/Users/macbookpro/hero/tasks/tmp/144689063900.md"
-    tags: []
-    metadata: {}
-    body:
-    - "/Users/macbookpro/hero/tasks/tmp/144689063900.md"
-    name: "/Users/macbookpro/hero/tasks/tmp/144689063900.md"
 tags:
   bash/todo: []
   hero/todo: []
   tools/util-archive: []
+  hero/h: []
+  todo/hero: []
   hero/projects: []
   hero/subcmd: []
   projects: []
@@ -299,4 +294,3 @@ tags:
   todo: []
   hero/training: []
   todo/training: []
-  todo/hero: []
