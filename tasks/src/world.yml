@@ -281,6 +281,30 @@ stories:
     - "#hero/todo #todo/hero"
     name: make a new h command that can list all subcmds and extensions because it
       loads
+  "/Users/macbookpro/hero/tasks/src/144689197900.md": !ruby/object:CliTasks::Note
+    data: |
+      write a subcommand that will track when an alias or function is created, which
+      one it is, and in which file.  the same cmd could be used to edit it later on
+
+      #hero/todo #todo/hero #bash/todo
+    file: "/Users/macbookpro/hero/tasks/src/144689197900.md"
+    lines:
+    - write a subcommand that will track when an alias or function is created, which
+    - one it is, and in which file.  the same cmd could be used to edit it later on
+    - ''
+    - "#hero/todo #todo/hero #bash/todo"
+    tags:
+    - bash/todo
+    - hero/todo
+    - todo/hero
+    metadata: {}
+    body:
+    - write a subcommand that will track when an alias or function is created, which
+    - one it is, and in which file.  the same cmd could be used to edit it later on
+    - ''
+    - "#hero/todo #todo/hero #bash/todo"
+    name: write a subcommand that will track when an alias or function is created,
+      which
 tags:
   bash/todo: []
   hero/todo: []
