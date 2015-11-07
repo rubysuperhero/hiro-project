@@ -202,6 +202,84 @@ stories:
     body:
     - "#todo go thru zsh history to find frequently used git/shell recipes"
     name: "#todo go thru zsh history to find frequently used git/shell recipes"
+  "/Users/macbookpro/hero/tasks/src/144688744200.md": !ruby/object:CliTasks::Note
+    data: |
+      write an article expaining all the reasons why i write my POROs the way i do
+
+      and the 3 ways to return the instance from a class method
+
+      1. tempvar = new(); tempvar.run; tempvar
+      2. new().tap(&:run)
+      3. new().run; # and #run will return `self`
+
+      #hero/training #todo/training
+    file: "/Users/macbookpro/hero/tasks/src/144688744200.md"
+    lines:
+    - write an article expaining all the reasons why i write my POROs the way i do
+    - ''
+    - and the 3 ways to return the instance from a class method
+    - ''
+    - 1. tempvar = new(); tempvar.run; tempvar
+    - 2. new().tap(&:run)
+    - '3. new().run; # and #run will return `self`'
+    - ''
+    - "#hero/training #todo/training"
+    tags:
+    - hero/training
+    - run
+    - todo/training
+    metadata: {}
+    body:
+    - write an article expaining all the reasons why i write my POROs the way i do
+    - ''
+    - and the 3 ways to return the instance from a class method
+    - ''
+    - 1. tempvar = new(); tempvar.run; tempvar
+    - 2. new().tap(&:run)
+    - '3. new().run; # and #run will return `self`'
+    - ''
+    - "#hero/training #todo/training"
+    name: write an article expaining all the reasons why i write my POROs the way
+      i do
+  "/Users/macbookpro/hero/tasks/src/144688744201.md": !ruby/object:CliTasks::Note
+    data: |
+      prepare an exercise demonstrating how to write tests for a 300 line legacy
+      method
+
+      #todo/training
+    file: "/Users/macbookpro/hero/tasks/src/144688744201.md"
+    lines:
+    - prepare an exercise demonstrating how to write tests for a 300 line legacy
+    - method
+    - ''
+    - "#todo/training"
+    tags:
+    - todo/training
+    metadata: {}
+    body:
+    - prepare an exercise demonstrating how to write tests for a 300 line legacy
+    - method
+    - ''
+    - "#todo/training"
+    name: prepare an exercise demonstrating how to write tests for a 300 line legacy
+  "/Users/macbookpro/hero/tasks/src/144688744202.md": !ruby/object:CliTasks::Note
+    data: |
+      prepare a lesson about writing pseudocode and making real code out of it
+
+      #todo/training
+    file: "/Users/macbookpro/hero/tasks/src/144688744202.md"
+    lines:
+    - prepare a lesson about writing pseudocode and making real code out of it
+    - ''
+    - "#todo/training"
+    tags:
+    - todo/training
+    metadata: {}
+    body:
+    - prepare a lesson about writing pseudocode and making real code out of it
+    - ''
+    - "#todo/training"
+    name: prepare a lesson about writing pseudocode and making real code out of it
 tags:
   bash/todo: []
   hero/todo: []
@@ -215,3 +293,6 @@ tags:
   three/four: []
   one: []
   tow/three/four: []
+  hero/training: []
+  run: []
+  todo/training: []

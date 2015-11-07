@@ -46,16 +46,16 @@ module MainCommand
     when 'restart'
       update_start_file
     when 'start'
-      if system('tmux ls | egrep -i <%= project %>')
-        system(* %w{tmux a -t <%= project %>})
-      else
-        system(* ("tmux new -s <%= project %> -c <%= path %> " + @args.join(' ')).split(' '))
-      end
-
       update_start_file
+
+      unless system('tmux ls | egrep -i <%= project %>')
+        system(* ("tmux new -d -s <%= project %> -c <%= path %> " + @args.join(' ')).split(' '))
+      end
 
       system(format('tmux neww -t %s', PROJECT))
       system(format('tmux send -t %s "vim start%s"', PROJECT, "\n"))
+
+      system(* %w{tmux a -t <%= project %>})
     when 'refresh'
       update_start_file
     when 'dir', 'cdto', 'cd', 'path', 'home'
@@ -119,26 +119,28 @@ module MainCommand
       file_list = `git ls-files`.lines.map(&:chomp)
 
       defer_regexps = %w{ start_file files defer regex }.inject(config) do |c,key|
-        break [] if c[key] == nil
+        break [] if c == nil || c[key] == nil
         c[key]
       end
 
       defer_literals = %w{ start_file files defer literal }.inject(config) do |c,key|
-        break [] if c[key] == nil
+        break [] if c == nil || c[key] == nil
         c[key]
       end
 
       exclude_regexps = %w{ start_file files exclude regex }.inject(config) do |c,key|
-        break [] if c[key] == nil
+        break [] if c == nil || c[key] == nil
         c[key]
       end
 
       exclude_literals = %w{ start_file files exclude literal }.inject(config) do |c,key|
-        break [] if c[key] == nil
-        c[key]
+        break [] if c == nil || c[key] == nil
+        c = c[key]
       end
 
       deferred_files = []
+
+      ap file_list_before: file_list
 
       file_list = defer_regexps.inject(file_list) do |flist,pattern|
         flist.select{|file|
@@ -165,6 +167,8 @@ module MainCommand
           file[pattern] == nil
         }
       end
+
+      ap file_list_after: file_list
 
       header file, 'project files'
       file.puts file_list

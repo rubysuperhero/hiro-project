@@ -121,6 +121,14 @@ class Projects
       end
     end
 
+    def add(name, path)
+      @data[name.to_s] = { 'path' => path }
+    end
+
+    def save
+
+    end
+
     def all
       load.keys
     end
@@ -142,7 +150,7 @@ class AddProject < SubCommand
   end
 
   def run
-    puts args.options
+    Projects.add(args.shift, args.shift)
   end
 end
 
