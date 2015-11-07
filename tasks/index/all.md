@@ -27,5 +27,4 @@ todo                                               |
 ----------------------
 
 create a project all subcommand for running a command on all the projects | '/Users/macbookpro/hero/tasks/src/144692264900.md'
-create a project all subcommand for running a command on all the projects | '/Users/macbookpro/hero/tasks/src/144692530100.md'
 
