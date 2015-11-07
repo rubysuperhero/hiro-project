@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+
+# Subcommands are defined at the bottom
+# Each subcommand has its own class
+# see: Help
+
+require 'awesome_print'
+require 'optparse'
+require 'fileutils'
+
+class Options
+  def set(k,v)
+    k = k.to_sym
+    singleton_class.class_eval{ attr_accessor k }
+    instance_variable_set("@#{k}", v)
+  end
+
+  def method_missing(*asdf)
+    false
+  end
+end
+
+module MainCommand
+  extend self
+
+  attr_accessor :args, :stdinput, :stdoutput
+  attr_accessor :options
+  def run(args=ARGV.clone, inp=$stdin, out=$stdout)
+    @args, @stdinput, @stdoutput = args, inp, out
+    @options = Options.new
+
+    parse_options
+
+    process
+  end
+
+  def templates_path
+    File.join(ENV['HOME'], 'hero', 'templates')
+  end
+
+  def experiments_path(sub=nil)
+    File.join(* [ENV['HOME'], 'hero', 'experiments', sub].compact)
+  end
+
+  def process
+    case subcmd
+    when 'r', 'ruby'
+      dir = experiments_path 'ruby'
+      FileUtils.mkdir_p(dir)
+      @args = [Time.now.strftime('%Y%m%d%H%M%S')] if @args.count == 0
+      file = File.join(dir, @args.join('_').gsub(/\W+/, ?_).sub(/([.]rb)?$/i, '.rb'))
+      FileUtils.cp(File.join(templates_path, 'experiment.rb'), file)
+      system('vim', file)
+    when 's', 'sh', 'shell', 'bash', 'zsh'
+      dir = experiments_path 'bash'
+      FileUtils.mkdir_p(dir)
+      @args = [Time.now.strftime('%Y%m%d%H%M%S')] if @args.count == 0
+      file = File.join(dir, @args.join('_').gsub(/\W+/, ?_).sub(/([.]sh)?$/i, '.sh'))
+      FileUtils.cp(File.join(templates_path, 'experiment.sh'), file)
+      system('vim', file)
+    when 'h', 'help'
+      run_help
+    else
+      raise Exception, format('%s not found', subcmd)
+      exit 1
+    end
+    exit 0
+  end
+
+  def run_help
+    puts args.options
+  end
+
+  def subcmd
+    @subcmd ||= args.shift
+  end
+
+  def parse_options
+    args.options { |opts|
+      opts.on('-h', '--help', 'print this message') do
+        @options.set(:help, true)
+      end
+    }.parse!
+  end
+end
+
+MainCommand.run
+

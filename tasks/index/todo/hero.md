@@ -12,3 +12,6 @@ dirname: /Users/macbookpro/hero/tasks
  write a subcommand that will track when an alias or function is created, which   |  'src/144689197900.md'
  write a subcommand that will track when an alias or function is created, which   |  '/Users/macbookpro/hero/tasks/src/144689197900.md'
 
+ make a directory for reusable ruby libs or shell scripts (normally start as      |  'src/144689283000.md'
+ make a directory for reusable ruby libs or shell scripts (normally start as      |  '/Users/macbookpro/hero/tasks/src/144689283000.md'
+

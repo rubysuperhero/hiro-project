@@ -1,0 +1,33 @@
+project: hero
+bin:
+  - bin/h
+  - bin/h-experiment
+  - bin/h-ff
+  - bin/h-fix
+  - bin/h-group-files
+  - bin/h-heroku
+  - bin/h-loop
+  - bin/h-loop2
+  - bin/h-note
+  - bin/h-path
+  - bin/h-project
+  - bin/h-rip
+  - bin/h-safe-il
+  - bin/h-task
+  - bin/h-tip
+  - bin/hero
+  - bin/old.h-task
+  - bin/projects
+binstub:
+  - binstubs/project
+  - binstubs/project.erb
+template:
+  - templates/bin.rb
+  - templates/command_with_options.rb
+  - templates/experiment.rb
+  - templates/experiment.sh
+  - templates/extensible_system_using_plugins.rb
+  - templates/hero.yml.erb
+  - templates/ripper_plugin_using_mechanize.rb
+  - templates/status_object.rb
+  - templates/subcmd.rb

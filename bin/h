@@ -2,10 +2,11 @@
 
 # 3rd party requirements
 require 'awesome_print'
-require 'pry'
+# require 'pry'
 require 'optparse'
 require 'singleton'
 require 'mkmf'
+require 'yaml'
 
 # H command requirements
 
@@ -29,6 +30,47 @@ module H
   end
 end
 
+class InstallFile
+  include Singleton
+
+  class << self
+    def hero; instance.hero; end
+    def file; instance.file; end
+    def data; instance.data; end
+    def load; instance.load; end
+    def bins; instance.bins; end
+    def binstubs; instance.binstubs; end
+    def templates; instance.templates; end
+  end
+
+  def hero
+    File.join(ENV['HOME'], 'hero')
+  end
+
+  def file
+    File.join Dir.pwd, 'install.yml'
+  end
+
+  def data
+    @data ||= IO.read(file)
+  end
+
+  def load
+    @load ||= YAML.load(data)
+  end
+
+  def bins
+    @bin ||= load['bins'] || []
+  end
+
+  def binstubs
+    @binstubs ||= load['binstubs'] || []
+  end
+
+  def templates
+    @templates ||= load['templates'] || []
+  end
+end
 
 # require 'h/env'
 module H
@@ -77,6 +119,10 @@ module H
       #   Note.run(args, stdin)
       when /path/i
         system("h-path", *args)
+      when /install/i
+        install_extension
+      when /path/i
+        system("h-path", *args)
       when /edit/i
         cmd = args.shift
         if system(format('which h-%s', cmd))
@@ -96,6 +142,26 @@ module H
         else
           puts format('%s command not found...', subcommand)
         end
+      end
+    end
+
+    def install_extension
+      InstallFile.bins.each do |b|
+        dest = File.join(ENV['HOME'], 'hero', 'bin', File.basename(b))
+        File.unlink(dest) if File.exist?(dest)
+        File.ln(File.join(Dir.pwd, b), dest)
+      end
+
+      InstallFile.binstubs.each do |b|
+        dest = File.join(ENV['HOME'], 'hero', 'binstubs', File.basename(b))
+        File.unlink(dest) if File.exist?(dest)
+        File.ln(File.join(Dir.pwd, b), dest)
+      end
+
+      InstallFile.templates.each do |b|
+        dest = File.join(ENV['HOME'], 'hero', 'templates', File.basename(b))
+        File.unlink(dest) if File.exist?(dest)
+        File.ln(File.join(Dir.pwd, b), dest)
       end
     end
   end
