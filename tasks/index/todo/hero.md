@@ -3,9 +3,6 @@ dirname: /Users/macbookpro/hero/tasks
 
  Title                                                                            |  Filename
 --------------------------------------------------------------------------------- | --------------------------
- maintain an archive of all the cli tools i've made, records of everytime i've    |  'src/144642129900.md'
- maintain an archive of all the cli tools i've made, records of everytime i've    |  '/Users/macbookpro/hero/tasks/src/144642129900.md'
-
  make a new h command that can list all subcmds and extensions because it loads   |  'src/144688952700.md'
  make a new h command that can list all subcmds and extensions because it loads   |  '/Users/macbookpro/hero/tasks/src/144688952700.md'
 

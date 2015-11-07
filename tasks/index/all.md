@@ -17,6 +17,7 @@ hero                                               |
   training                                         | 'index/hero/training.md'
 todo                                               |
   training                                         | 'index/todo/training.md'
+  hero                                             | 'index/todo/hero.md'
 
 
  Stories With No Tags
