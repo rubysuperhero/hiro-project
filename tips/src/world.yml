@@ -155,6 +155,97 @@ stories:
     - ''
     - "#git #git/branch #git/symbolic-ref"
     name: using symbolic-ref to make branch aliases is great because...
+  "/Users/macbookpro/hero/tips/src/144689089400.md": !ruby/object:CliTasks::Note
+    data: |
+      how to use `:il` so that it only looks in the current file
+
+      write a shell script that will give u the first line number after the last
+      require command
+
+      #vim
+    file: "/Users/macbookpro/hero/tips/src/144689089400.md"
+    lines:
+    - how to use `:il` so that it only looks in the current file
+    - ''
+    - write a shell script that will give u the first line number after the last
+    - require command
+    - ''
+    - "#vim"
+    tags:
+    - vim
+    metadata: {}
+    body:
+    - how to use `:il` so that it only looks in the current file
+    - ''
+    - write a shell script that will give u the first line number after the last
+    - require command
+    - ''
+    - "#vim"
+    name: how to use `:il` so that it only looks in the current file
+  "/Users/macbookpro/hero/tips/src/144689089401.md": !ruby/object:CliTasks::Note
+    data: |
+      using a "start" file can drastically improve your vim speed
+
+      create mappings to:
+
+      - refresh the start file
+      - change the current buffer to the start file
+
+      #vim  #vim/start
+    file: "/Users/macbookpro/hero/tips/src/144689089401.md"
+    lines:
+    - using a "start" file can drastically improve your vim speed
+    - ''
+    - 'create mappings to:'
+    - ''
+    - "- refresh the start file"
+    - "- change the current buffer to the start file"
+    - ''
+    - "#vim  #vim/start"
+    tags:
+    - vim
+    - vim/start
+    metadata: {}
+    body:
+    - using a "start" file can drastically improve your vim speed
+    - ''
+    - 'create mappings to:'
+    - ''
+    - "- refresh the start file"
+    - "- change the current buffer to the start file"
+    - ''
+    - "#vim  #vim/start"
+    name: using a "start" file can drastically improve your vim speed
+  "/Users/macbookpro/hero/tips/src/144689089402.md": !ruby/object:CliTasks::Note
+    data: |
+      one main reason i love `:b` is because it only requires the shortest uniq match
+      of the filename to switch to that buffer
+
+      (see: my vf cabbrev)
+
+      #vim #vim/buffers #vim/commands
+    file: "/Users/macbookpro/hero/tips/src/144689089402.md"
+    lines:
+    - one main reason i love `:b` is because it only requires the shortest uniq match
+    - of the filename to switch to that buffer
+    - ''
+    - "(see: my vf cabbrev)"
+    - ''
+    - "#vim #vim/buffers #vim/commands"
+    tags:
+    - vim
+    - vim/buffers
+    - vim/commands
+    metadata: {}
+    body:
+    - one main reason i love `:b` is because it only requires the shortest uniq match
+    - of the filename to switch to that buffer
+    - ''
+    - "(see: my vf cabbrev)"
+    - ''
+    - "#vim #vim/buffers #vim/commands"
+    name: one main reason i love `:b` is because it only requires the shortest uniq
+      match
 tags:
   bash: []
   files: []
@@ -172,3 +263,7 @@ tags:
   zsh/glob-pattern: []
   git/branch: []
   git/symbolic-ref: []
+  vim: []
+  vim/start: []
+  vim/buffers: []
+  vim/commands: []

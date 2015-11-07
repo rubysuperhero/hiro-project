@@ -16,6 +16,9 @@ zsh                                                | 'index/zsh.md'
   file-patterns                                    | 'index/zsh/file-patterns.md'
   glob                                             | 'index/zsh/glob.md'
   glob-pattern                                     | 'index/zsh/glob-pattern.md'
+git                                                |
+  branch                                           | 'index/git/branch.md'
+  symbolic-ref                                     | 'index/git/symbolic-ref.md'
 
 
  Stories With No Tags
