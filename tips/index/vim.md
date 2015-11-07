@@ -12,3 +12,6 @@ dirname: /Users/macbookpro/hero/tips
  one main reason i love `:b` is because it only requires the shortest uniq match  |  'src/144689089402.md'
  one main reason i love `:b` is because it only requires the shortest uniq match  |  '/Users/macbookpro/hero/tips/src/144689089402.md'
 
+ #vim lets you define a leader key for a reason - avoid mappings that overwrite   |  'src/144692694700.md'
+ #vim lets you define a leader key for a reason - avoid mappings that overwrite   |  '/Users/macbookpro/hero/tips/src/144692694700.md'
+
