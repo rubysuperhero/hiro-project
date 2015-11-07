@@ -155,42 +155,6 @@ stories:
     name: 'create "project" subcommand which will add name/path to projects.yml and
       generate a binstub similar to note/task or the heroku binstubs #hero/projects
       #hero/subcmd #projects #todo #subcmd/create'
-  "/Users/macbookpro/hero/tasks/src/144671627900.md": !ruby/object:CliTasks::Note
-    data: 'hello world testing one two #three/four #hello/world/this/is/testing'
-    file: "/Users/macbookpro/hero/tasks/src/144671627900.md"
-    lines:
-    - 'hello world testing one two #three/four #hello/world/this/is/testing'
-    tags:
-    - hello/world/this/is/testing
-    - three/four
-    metadata: {}
-    body:
-    - 'hello world testing one two #three/four #hello/world/this/is/testing'
-    name: 'hello world testing one two #three/four #hello/world/this/is/testing'
-  "/Users/macbookpro/hero/tasks/src/144671756100.md": !ruby/object:CliTasks::Note
-    data: 'hello world one #one #tow/three/four'
-    file: "/Users/macbookpro/hero/tasks/src/144671756100.md"
-    lines:
-    - 'hello world one #one #tow/three/four'
-    tags:
-    - one
-    - tow/three/four
-    metadata: {}
-    body:
-    - 'hello world one #one #tow/three/four'
-    name: 'hello world one #one #tow/three/four'
-  "/Users/macbookpro/hero/tasks/src/144671784400.md": !ruby/object:CliTasks::Note
-    data: 'hello world one #one #tow/three/four'
-    file: "/Users/macbookpro/hero/tasks/src/144671784400.md"
-    lines:
-    - 'hello world one #one #tow/three/four'
-    tags:
-    - one
-    - tow/three/four
-    metadata: {}
-    body:
-    - 'hello world one #one #tow/three/four'
-    name: 'hello world one #one #tow/three/four'
   "/Users/macbookpro/hero/tasks/src/144684769000.md": !ruby/object:CliTasks::Note
     data: "#todo go thru zsh history to find frequently used git/shell recipes"
     file: "/Users/macbookpro/hero/tasks/src/144684769000.md"
@@ -210,7 +174,7 @@ stories:
 
       1. tempvar = new(); tempvar.run; tempvar
       2. new().tap(&:run)
-      3. new().run; # and #run will return `self`
+      3. new().run; # and `\#run` will return `self`
 
       #hero/training #todo/training
     file: "/Users/macbookpro/hero/tasks/src/144688744200.md"
@@ -221,12 +185,11 @@ stories:
     - ''
     - 1. tempvar = new(); tempvar.run; tempvar
     - 2. new().tap(&:run)
-    - '3. new().run; # and #run will return `self`'
+    - '3. new().run; # and `\#run` will return `self`'
     - ''
     - "#hero/training #todo/training"
     tags:
     - hero/training
-    - run
     - todo/training
     metadata: {}
     body:
@@ -236,7 +199,7 @@ stories:
     - ''
     - 1. tempvar = new(); tempvar.run; tempvar
     - 2. new().tap(&:run)
-    - '3. new().run; # and #run will return `self`'
+    - '3. new().run; # and `\#run` will return `self`'
     - ''
     - "#hero/training #todo/training"
     name: write an article expaining all the reasons why i write my POROs the way
@@ -289,10 +252,5 @@ tags:
   projects: []
   subcmd/create: []
   todo: []
-  hello/world/this/is/testing: []
-  three/four: []
-  one: []
-  tow/three/four: []
   hero/training: []
-  run: []
   todo/training: []
