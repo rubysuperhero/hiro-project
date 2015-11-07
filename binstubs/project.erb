@@ -9,6 +9,7 @@
 require 'optparse'
 require 'awesome_print'
 require 'ostruct'
+require 'yaml'
 
 module MainCommand
   extend self
@@ -20,12 +21,21 @@ module MainCommand
   attr_accessor :piped_data
   attr_accessor :special_options
   attr_accessor :pwd, :original_pwd
+  attr_accessor :config
 
   def run(args=ARGV.clone, input=$stdin, output=$stdout)
     @args, @stdinput, @stdoutput = args, input, output
 
     @original_pwd = Dir.pwd
     Dir.chdir(PROJECT_HOME)
+
+    if File.exist?('hero.yml')
+      file = 'hero.yml'
+      io = IO.read(file)
+      yml = YAML.load(io)
+      @config = yml
+    end
+
     @pwd = Dir.pwd
 
     parse_options
@@ -33,6 +43,19 @@ module MainCommand
     subcommand = args.shift
 
     case subcommand
+    when 'restart'
+      update_start_file
+    when 'start'
+      if system('tmux ls | egrep -i <%= project %>')
+        system(* %w{tmux a -t <%= project %>})
+      else
+        system(* ("tmux new -s <%= project %> -c <%= path %> " + @args.join(' ')).split(' '))
+      end
+
+      update_start_file
+
+      system(format('tmux neww -t %s', PROJECT))
+      system(format('tmux send -t %s "vim start%s"', PROJECT, "\n"))
     when 'refresh'
       update_start_file
     when 'dir', 'cdto', 'cd', 'path', 'home'
@@ -41,7 +64,7 @@ module MainCommand
     when 'run'
       system(* args)
     when ?t, 'tmux'
-    if system('tmux ls | egrep -i <%= project %>')
+      if system('tmux ls | egrep -i <%= project %>')
         system(* %w{tmux a -t <%= project %>})
       else
         system(* ("tmux new -s <%= project %> -c <%= path %> " + @args.join(' ')).split(' '))
@@ -59,32 +82,96 @@ module MainCommand
     puts
   end
 
+  def header(file, head, double_space=true)
+    file.puts if double_space
+    file.puts
+    file.puts format('# %s', head)
+    file.puts format('# %s', head).gsub(/./, ?-)
+  end
+
   def update_start_file
     File.open('start', 'w+') do |file|
-      file.puts
-      file.puts '# git recent-branches'
-      '
+      header file, 'git recent-branches', false
       files = `git status -s`.lines.map(&:chomp)
 
-      file.puts
-      file.puts '# git status'
+      header file, 'git status'
+
       files = `git status -s`.lines.map(&:chomp)
       max_length = files.map{|f|
-        f.sub(/^..(?:\s.* ->)?/, '').tap{|shf|
-          puts shf: shf
-        }.length
+        f.sub(/^..(?:\s.* ->)?/, '').length
       }.max
+
+      grouped = {}
       start_files = files.map do |f|
-        replaced = f[/^..\s(?:.* -> )?/]
-        format("%-#{max_length}s  # %-s", f.sub(/^(..) (.* -> )?/, 'git add --all '), replaced)
-        replaced = f[/^..\s(?:.* -> )?/]
-        format("%-#{max_length}s  # %-s", f.sub(/^(..) (.* -> )?/, 'git add --all '), replaced)
+        fname = f.sub(/^(..) (.* -> )?/, '')
+        replaced = f[/^..\s(?:.* -> )?/].sub(/\s*$/, '' )
+        grouped.merge! replaced => grouped.fetch(replaced, []).push(fname)
+        format("%-#{max_length}s  # %-s", fname, replaced)
       end
-      file.puts start_files
-      file.puts
-      file.puts '# project files'
-      file_list = `git ls-files`
+
+      grouped.each do |k,v|
+        file.puts
+        file.puts format('  ## %s', k)
+        file.puts format('  ------', k)
+        file.puts v.map{|vf| format('  %s', vf) }
+      end
+
+      file_list = `git ls-files`.lines.map(&:chomp)
+
+      defer_regexps = %w{ start_file files defer regex }.inject(config) do |c,key|
+        break [] if c[key] == nil
+        c[key]
+      end
+
+      defer_literals = %w{ start_file files defer literal }.inject(config) do |c,key|
+        break [] if c[key] == nil
+        c[key]
+      end
+
+      exclude_regexps = %w{ start_file files exclude regex }.inject(config) do |c,key|
+        break [] if c[key] == nil
+        c[key]
+      end
+
+      exclude_literals = %w{ start_file files exclude literal }.inject(config) do |c,key|
+        break [] if c[key] == nil
+        c[key]
+      end
+
+      deferred_files = []
+
+      file_list = defer_regexps.inject(file_list) do |flist,pattern|
+        flist.select{|file|
+          file[Regexp.new(pattern)] && deferred_files.push(file)
+          file[Regexp.new(pattern)] == nil
+        }
+      end
+
+      file_list = defer_literals.inject(file_list) do |flist,pattern|
+        flist.select{|file|
+          file[pattern] && deferred_files.push(file)
+          file[pattern] == nil
+        }
+      end
+
+      file_list = exclude_regexps.inject(file_list) do |flist,pattern|
+        flist.select{|file|
+          file[Regexp.new(pattern)] == nil
+        }
+      end
+
+      file_list = exclude_literals.inject(file_list) do |flist,pattern|
+        flist.select{|file|
+          file[pattern] == nil
+        }
+      end
+
+      header file, 'project files'
       file.puts file_list
+
+      header file, 'deferred files'
+      file.puts deferred_files
+
       file.puts
     end
   end

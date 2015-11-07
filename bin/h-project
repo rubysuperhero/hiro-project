@@ -202,6 +202,10 @@ class GenerateBinstubs < SubCommand
     @template ||= IO.read(File.join(ENV['HOME'], 'hero', 'binstubs', 'project.erb'))
   end
 
+  def config_template
+    @config_template ||= IO.read(File.join(ENV['HOME'], 'hero', 'templates', 'hero.yml.erb'))
+  end
+
   def projects_dir
     File.join(ENV['HOME'], 'hero', 'projects').tap do |pdir|
       FileUtils.mkdir_p(pdir)
@@ -216,6 +220,11 @@ class GenerateBinstubs < SubCommand
       IO.write(cmd, binstub)
       puts `chmod +x #{cmd}`
       puts `ls -l #{cmd}`
+
+      config = File.join(path, 'hero.yml')
+      next if File.exist?(config)
+      configuration = ERB.new(config_template).result(binding)
+      IO.write(config, configuration)
     end
   end
 end
