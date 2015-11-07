@@ -149,19 +149,19 @@ module H
       InstallFile.bins.each do |b|
         dest = File.join(ENV['HOME'], 'hero', 'bin', File.basename(b))
         File.unlink(dest) if File.exist?(dest)
-        File.ln(File.join(Dir.pwd, b), dest)
+        File.link(File.join(Dir.pwd, b), dest)
       end
 
       InstallFile.binstubs.each do |b|
         dest = File.join(ENV['HOME'], 'hero', 'binstubs', File.basename(b))
         File.unlink(dest) if File.exist?(dest)
-        File.ln(File.join(Dir.pwd, b), dest)
+        File.link(File.join(Dir.pwd, b), dest)
       end
 
       InstallFile.templates.each do |b|
         dest = File.join(ENV['HOME'], 'hero', 'templates', File.basename(b))
         File.unlink(dest) if File.exist?(dest)
-        File.ln(File.join(Dir.pwd, b), dest)
+        File.link(File.join(Dir.pwd, b), dest)
       end
     end
   end
