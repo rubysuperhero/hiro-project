@@ -246,6 +246,21 @@ stories:
     - "#vim #vim/buffers #vim/commands"
     name: one main reason i love `:b` is because it only requires the shortest uniq
       match
+  "/Users/macbookpro/hero/tips/src/144692694700.md": !ruby/object:CliTasks::Note
+    data: "#vim lets you define a leader key for a reason - avoid mappings that overwrite
+      standard shortcuts, no matter how obscure they seem at the time"
+    file: "/Users/macbookpro/hero/tips/src/144692694700.md"
+    lines:
+    - "#vim lets you define a leader key for a reason - avoid mappings that overwrite
+      standard shortcuts, no matter how obscure they seem at the time"
+    tags:
+    - vim
+    metadata: {}
+    body:
+    - "#vim lets you define a leader key for a reason - avoid mappings that overwrite
+      standard shortcuts, no matter how obscure they seem at the time"
+    name: "#vim lets you define a leader key for a reason - avoid mappings that overwrite
+      standard shortcuts, no matter how obscure they seem at the time"
 tags:
   bash: []
   files: []
