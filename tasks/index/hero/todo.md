@@ -12,3 +12,6 @@ dirname: /Users/macbookpro/hero/tasks
  make a new h command that can list all subcmds and extensions because it loads   |  'src/144688952700.md'
  make a new h command that can list all subcmds and extensions because it loads   |  '/Users/macbookpro/hero/tasks/src/144688952700.md'
 
+ write a subcommand that will track when an alias or function is created, which   |  'src/144689197900.md'
+ write a subcommand that will track when an alias or function is created, which   |  '/Users/macbookpro/hero/tasks/src/144689197900.md'
+

@@ -305,6 +305,22 @@ stories:
     - "#hero/todo #todo/hero #bash/todo"
     name: write a subcommand that will track when an alias or function is created,
       which
+  "/Users/macbookpro/hero/tasks/src/144689283000.md": !ruby/object:CliTasks::Note
+    data: 'make a directory for reusable ruby libs or shell scripts (normally start
+      as experiments) #todo/hero #hero/todo'
+    file: "/Users/macbookpro/hero/tasks/src/144689283000.md"
+    lines:
+    - 'make a directory for reusable ruby libs or shell scripts (normally start as
+      experiments) #todo/hero #hero/todo'
+    tags:
+    - hero/todo
+    - todo/hero
+    metadata: {}
+    body:
+    - 'make a directory for reusable ruby libs or shell scripts (normally start as
+      experiments) #todo/hero #hero/todo'
+    name: 'make a directory for reusable ruby libs or shell scripts (normally start
+      as experiments) #todo/hero #hero/todo'
 tags:
   bash/todo: []
   hero/todo: []
