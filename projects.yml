@@ -1,52 +1,61 @@
+---
 cammie:
-  path: /Users/macbookpro/www/cammie
+  path: "/Users/macbookpro/www/cammie"
+anime:
+  path: "/Users/macbookpro/dl/anime"
 copley:
-  path: /Users/macbookpro/repos/copley/www
+  path: "/Users/macbookpro/repos/copley/www"
 hero:
-  path: /Users/macbookpro/hero
+  path: "/Users/macbookpro/hero"
 h-bin:
-  path: /Users/macbookpro/hero/distro/h-bin
+  path: "/Users/macbookpro/hero/distro/h-bin"
 h-config:
-  path: /Users/macbookpro/hero/distro/h-config
+  path: "/Users/macbookpro/hero/distro/h-config"
 h-cron:
-  path: /Users/macbookpro/hero/distro/h-cron
+  path: "/Users/macbookpro/hero/distro/h-cron"
 h-dot:
-  path: /Users/macbookpro/hero/distro/h-dot
+  path: "/Users/macbookpro/hero/distro/h-dot"
 h-experiments:
-  path: /Users/macbookpro/hero/distro/h-experiments
+  path: "/Users/macbookpro/hero/distro/h-experiments"
 h-ext:
-  path: /Users/macbookpro/hero/distro/h-ext
+  path: "/Users/macbookpro/hero/distro/h-ext"
 h-ff:
-  path: /Users/macbookpro/hero/distro/h-ff
+  path: "/Users/macbookpro/hero/distro/h-ff"
 h-git:
-  path: /Users/macbookpro/hero/distro/h-git
+  path: "/Users/macbookpro/hero/distro/h-git"
 h-heroku:
-  path: /Users/macbookpro/hero/distro/h-heroku
+  path: "/Users/macbookpro/hero/distro/h-heroku"
 h-note:
-  path: /Users/macbookpro/hero/distro/h-note
+  path: "/Users/macbookpro/hero/distro/h-note"
 h-pomo:
-  path: /Users/macbookpro/hero/distro/h-pomo
+  path: "/Users/macbookpro/hero/distro/h-pomo"
 h-project:
-  path: /Users/macbookpro/hero/distro/h-project
+  path: "/Users/macbookpro/hero/distro/h-project"
 h-src:
-  path: /Users/macbookpro/hero/distro/h-src
+  path: "/Users/macbookpro/hero/distro/h-src"
 h-ssh:
-  path: /Users/macbookpro/hero/distro/h-ssh
+  path: "/Users/macbookpro/hero/distro/h-ssh"
 h-start:
-  path: /Users/macbookpro/hero/distro/h-start_file
+  path: "/Users/macbookpro/hero/distro/h-start_file"
 h-task:
-  path: /Users/macbookpro/hero/distro/h-task
+  path: "/Users/macbookpro/hero/distro/h-task"
 h-templates:
-  path: /Users/macbookpro/hero/distro/h-templates
+  path: "/Users/macbookpro/hero/distro/h-templates"
 h-tip:
-  path: /Users/macbookpro/hero/distro/h-tip
+  path: "/Users/macbookpro/hero/distro/h-tip"
 h-tmux:
-  path: /Users/macbookpro/hero/distro/h-tmux
+  path: "/Users/macbookpro/hero/distro/h-tmux"
 h-training:
-  path: /Users/macbookpro/hero/distro/h-training
+  path: "/Users/macbookpro/hero/distro/h-training"
 h-utils:
-  path: /Users/macbookpro/hero/distro/h-utils
+  path: "/Users/macbookpro/hero/distro/h-utils"
 h-vim:
-  path: /Users/macbookpro/hero/distro/h-vim
+  path: "/Users/macbookpro/hero/distro/h-vim"
 h:
-  path: /Users/macbookpro/hero/distro/h
+  path: "/Users/macbookpro/hero/distro/h"
+dotfiles:
+  path: "/Users/macbookpro/better-dotfiles"
+dotvim:
+  path: "/Users/macbookpro/better-dotfiles/src/vim"
+dotzsh:
+  path: "/Users/macbookpro/better-dotfiles/src/zsh"
