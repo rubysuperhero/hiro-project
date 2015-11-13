@@ -1154,6 +1154,7 @@ module CliTasks
   class Commands
     class << self
       def commit(message='auto-saving notes')
+        return
         return unless system('git rev-parse --show-toplevel &>/dev/null')
 
         reindex
