@@ -111,26 +111,32 @@ end
 
 class Projects
   class << self
-    attr_accessor :file, :data, :yaml
+    def file
+      File.join(ENV['HOME'], 'hero', 'projects.yml')
+    end
 
-    def load
-      @load ||= begin
-        @file = File.join(ENV['HOME'], 'hero', 'projects.yml')
-        @yaml = IO.read(file)
-        @data = YAML.load(@yaml)
-      end
+    def yaml
+      IO.read(file)
+    end
+
+    def data
+      @data ||= YAML.load(yaml)
+    end
+
+    def data!
+      @data = YAML.load(yaml)
     end
 
     def add(name, path)
-      @data[name.to_s] = { 'path' => path }
+      data[name.to_s] = { 'path' => path }
     end
 
     def save
-
+      IO.write(file, YAML.dump(data))
     end
 
     def all
-      load.keys
+      data.keys
     end
   end
 end
@@ -151,6 +157,7 @@ class AddProject < SubCommand
 
   def run
     Projects.add(args.shift, args.shift)
+    Projects.save.tap{|sv| puts format("puts(ing) save's return value => '%s'", sv.inspect) }
   end
 end
 
