@@ -5,10 +5,291 @@
 # see: Help
 
 require 'awesome_print'
-require 'optparse'
-require 'yaml'
-require 'fileutils'
 require 'erb'
+require 'fileutils'
+require 'optparse'
+# require 'ostruct'
+require 'yaml'
+
+module ProjectCommand
+  extend self
+
+  attr_accessor :args, :stdinput, :stdoutput
+  attr_accessor :piped_data
+  attr_accessor :special_options
+  attr_accessor :pwd, :original_pwd
+  attr_accessor :config
+  attr_accessor :project_name, :project_home
+
+  def subcommands
+    %w{ label labels listlabels mki mkissue makei makeissue make-issue i issues t tmux run dir cdto cd path home refresh start restart }
+  end
+
+  def run(proj_name, proj_home)
+    @args, @stdinput, @stdoutput = MainCommand.args.clone, MainCommand.stdinput, MainCommand.stdoutput
+    @project_name = proj_name
+    @project_home = proj_home
+
+    @original_pwd = Dir.pwd
+    Dir.chdir(project_home)
+
+    if File.exist?('hero.yml')
+      file = 'hero.yml'
+      io = IO.read(file)
+      yml = YAML.load(io)
+      @config = yml
+    end
+
+    @pwd = Dir.pwd
+
+    parse_options
+
+    subcommand = args.shift
+
+    case subcommand
+    when 'restart'
+      update_start_file
+    when 'start'
+      update_start_file
+
+      unless system(format('tmux ls | egrep -i %s', project_name))
+        system(* format("tmux new -d -s %s -c %s %s", project_name, project_home, @args.join(' ')).split(' '))
+      end
+
+      system(format('tmux neww -t %s', project_name))
+      system(format('tmux send -t %s "vim start%s"', project_name, "\n"))
+
+      system(format('tmux a -t %s', project_name))
+    when 'refresh'
+      update_start_file
+    when 'dir', 'cdto', 'cd', 'path', 'home'
+      Dir.chdir project_home
+      printf '%s', project_home
+    when 'run'
+      system(* args)
+    when ?t, 'tmux'
+      if system(format('tmux ls | egrep -i %s', project_name))
+        system(format('tmux a -t %s', project_name))
+      else
+        system(* format("tmux new -s %s -c %s %s", project_name, project_home, @args.join(' ')).split(' '))
+      end
+    when ?i, 'issues'
+      system(* %w{ghi list})
+    when 'mki', 'mkissue', 'makei', 'makeissue', 'make-issue'
+      system(* build_github_issues_command)
+    when 'label', 'labels', 'listlabels'
+      system(* %w{ghi label --list}, *args)
+    else
+      puts(sprintf 'Unknown Subcommand: %s', subcommand)
+    end
+
+    puts
+  end
+
+  def header(file, head, double_space=true)
+    file.puts if double_space
+    file.puts
+    file.puts format('# %s', head)
+    file.puts format('# %s', head).gsub(/./, ?-)
+  end
+
+  def update_start_file
+    File.open('start', 'w+') do |file|
+      header file, 'git recent-branches', false
+      files = `git status -s`.lines.map(&:chomp)
+
+      header file, 'git status'
+
+      files = `git status -s`.lines.map(&:chomp)
+      max_length = files.map{|f|
+        f.sub(/^..(?:\s.* ->)?/, '').length
+      }.max
+
+      grouped = {}
+      start_files = files.map do |f|
+        fname = f.sub(/^(..) (.* -> )?/, '')
+        replaced = f[/^..\s(?:.* -> )?/].sub(/\s*$/, '' )
+        grouped.merge! replaced => grouped.fetch(replaced, []).push(fname)
+        format("%-#{max_length}s  # %-s", fname, replaced)
+      end
+
+      grouped.each do |k,v|
+        file.puts
+        file.puts format('  ## %s', k)
+        file.puts format('  ------', k)
+        file.puts v.map{|vf| format('  %s', vf) }
+      end
+
+      file_list = `git ls-files`.lines.map(&:chomp)
+
+      defer_regexps = %w{ start_file files defer regex }.inject(config) do |c,key|
+        break [] if c == nil || c[key] == nil
+        c[key]
+      end
+
+      defer_literals = %w{ start_file files defer literal }.inject(config) do |c,key|
+        break [] if c == nil || c[key] == nil
+        c[key]
+      end
+
+      exclude_regexps = %w{ start_file files exclude regex }.inject(config) do |c,key|
+        break [] if c == nil || c[key] == nil
+        c[key]
+      end
+
+      exclude_literals = %w{ start_file files exclude literal }.inject(config) do |c,key|
+        break [] if c == nil || c[key] == nil
+        c = c[key]
+      end
+
+      deferred_files = []
+
+      ap file_list_before: file_list
+
+      file_list = defer_regexps.inject(file_list) do |flist,pattern|
+        flist.select{|file|
+          file[Regexp.new(pattern)] && deferred_files.push(file)
+          file[Regexp.new(pattern)] == nil
+        }
+      end
+
+      file_list = defer_literals.inject(file_list) do |flist,pattern|
+        flist.select{|file|
+          file[pattern] && deferred_files.push(file)
+          file[pattern] == nil
+        }
+      end
+
+      file_list = exclude_regexps.inject(file_list) do |flist,pattern|
+        flist.select{|file|
+          file[Regexp.new(pattern)] == nil
+        }
+      end
+
+      file_list = exclude_literals.inject(file_list) do |flist,pattern|
+        flist.select{|file|
+          file[pattern] == nil
+        }
+      end
+
+      ap file_list_after: file_list
+
+      header file, 'project files'
+      file.puts file_list
+
+      header file, 'deferred files'
+      file.puts deferred_files
+
+      file.puts
+    end
+  end
+
+  def build_github_issues_command
+    cmd = []
+    values = []
+    labels = nil
+    assign_to = nil
+    milestone = 1
+    claim = false
+    special_options.each do |opt|
+      subcmd = opt.shift
+      case subcmd
+      when ':claim'
+        claim = true
+      when 'assign:', 'assign_to:'
+        assign_to = opt.shift
+      when 'labels:', 'tags:'
+        labels = opt.map(&:strip).map{|o| o.sub(/,?$/,'') }.join(?,)
+      when 'milestone:'
+        milestone = opt.first
+      end
+    end
+
+    formatted_cmd = []
+    ## issue name
+    # cmd << 'ghi open -m "%s"'
+    # values << @args.join(' ')
+
+    formatted_cmd << format('ghi open -m "%s"', @args.join(' '))
+
+    ## milestone id
+    # cmd << '-M %d'
+    # values << milestone
+
+    formatted_cmd << format('-M %d', milestone)
+
+    ## labels/tags
+    # unless labels == nil
+    #   cmd << '-L %s'
+    #   values << labels
+    # end
+
+    formatted_cmd << format('-L %s', labels) unless labels == nil
+
+    ## assign to
+    # unless assign_to == nil
+    #   cmd << '--assign %s'
+    #   values << assign_to
+    # end
+
+    formatted_cmd << format('--assign %s', assign_to) unless assign_to == nil
+
+    formatted_cmd << format('--claim') if claim == true
+
+    return formatted_cmd.join(' ')
+
+    ## --- nothing is ran below this line ---
+
+    cmd = [cmd.join(' ')] + values
+    return format(* cmd)
+    message = @args.join(' ')
+    ghi = 'ghi open -m "%s" -M %d'
+    ghi += ' -L %s' unless labels == nil
+    ghi += ' --assign %s' unless assign_to == nil
+    format(ghi, message, milestone, labels)
+  end
+
+  def parse_options
+    @special_options ||= []
+    i = 0
+    last_arg = :not_started
+    same_arg = 0
+    while i < args.length
+      sopts = []
+
+      next i += 1 unless (arg=args[i]).strip[/:$/] || (arg=args[i]).strip[/:claim/i]
+
+      if last_arg == arg
+        same_arg += 1
+      else
+        same_arg = 0
+        last_arg = arg
+      end
+
+      break if same_arg > 3
+
+      sopts << arg
+
+      if arg != ':claim'
+        sopts += args[(i+1)..-1].take_while do |sarg|
+          not (sarg.strip[/:$/] || sarg.strip[/^:claim/])
+        end
+      end
+
+      @special_options.push sopts
+      args.slice!(i, sopts.length)
+    end
+  end
+
+  def options
+    @options ||= OpenStruct.new.tap do |opts|
+      # default options go here
+      # or pass them to #new as a hash
+
+      opts.show_help = false
+    end
+  end
+end
 
 class Options
   def set(k,v)
@@ -32,9 +313,59 @@ class SubCommand
   class << self
     attr_accessor :commands
     def process
-      commands.find{|cmd|
+      subcmd = MainCommand.subcmd
+
+      if has_match?
+        command.run
+      else
+        matching_projects = Projects.all.select do |project|
+          project[subcmd]
+        end
+
+        case matching_projects.count
+        when 0
+          if ProjectCommand.subcommands.find{|scmd| subcmd == scmd }
+            project, vals = Projects.data.select{|name,vals|
+              Dir.pwd[vals['path']]
+            }.max{|a,b| a.last['path'].length <=> b.last['path'].length }
+
+            if project
+              ProjectCommand.run(project, vals['path'])
+            else
+              puts format('The current directory is not associated with any known projects.')
+              exit 1
+            end
+          end
+          puts format('Subcommand: %s; No matching subcommands or projects found.', subcmd)
+          exit 1
+        when 1
+          project_data = Projects.data[matching_projects.first]
+          ProjectCommand.run(matching_projects.first, project_data['path'])
+        else
+          exact_match = matching_projects.find{|mp| mp == subcmd }
+
+          if exact_match
+            project_data = Projects.data[exact_match]
+            ProjectCommand.run(exact_match, project_data['path'])
+            exit 0
+          end
+
+          puts 'More than one project name matched:'
+          matching_projects.each do |proj|
+            puts format('  * %s', proj)
+          end
+        end
+      end
+    end
+
+    def command
+      @command ||= commands.find{|cmd|
         cmd.matches?(MainCommand.subcmd)
-      }.run
+      }
+    end
+
+    def has_match?
+      command != nil
     end
 
     def register(klass)
