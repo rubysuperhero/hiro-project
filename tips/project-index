@@ -1,0 +1,216 @@
+
+
+Project Directory: /Users/macbookpro/hero/tips
+
+
+ |  TAG: | bash (2)
+
+ 144641364200  favor hardlinks over symlinks, when possible.  for example, a symlink can break      
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | bash/file-patterns (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | bash/glob (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | bash/glob-pattern (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | files (2)
+
+ 144641364200  favor hardlinks over symlinks, when possible.  for example, a symlink can break      
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | files/glob-patterns (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | files/hidden-files (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | git (2)
+
+ 144641364200  favor hardlinks over symlinks, when possible.  for example, a symlink can break      
+
+ 144689013800  using symbolic-ref to make branch aliases is great because...                        
+
+
+
+ |  TAG: | git/branch (1)
+
+ 144689013800  using symbolic-ref to make branch aliases is great because...                        
+
+
+
+ |  TAG: | git/symbolic-ref (1)
+
+ 144689013800  using symbolic-ref to make branch aliases is great because...                        
+
+
+
+ |  TAG: | hardlink (1)
+
+ 144641364200  favor hardlinks over symlinks, when possible.  for example, a symlink can break      
+
+
+
+ |  TAG: | symlink (1)
+
+ 144641364200  favor hardlinks over symlinks, when possible.  for example, a symlink can break      
+
+
+
+ |  TAG: | vim (4)
+
+ 144689089400  how to use `:il` so that it only looks in the current file                           
+
+ 144689089402  one main reason i love `:b` is because it only requires the shortest uniq match      
+
+ 144689089401  using a "start" file can drastically improve your vim speed                          
+
+ 144692694700  #vim lets you define a leader key for a reason - avoid mappings that overwrite stand 
+
+
+
+ |  TAG: | vim/buffers (1)
+
+ 144689089402  one main reason i love `:b` is because it only requires the shortest uniq match      
+
+
+
+ |  TAG: | vim/commands (1)
+
+ 144689089402  one main reason i love `:b` is because it only requires the shortest uniq match      
+
+
+
+ |  TAG: | vim/start (1)
+
+ 144689089401  using a "start" file can drastically improve your vim speed                          
+
+
+
+ |  TAG: | zsh (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | zsh/file-patterns (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | zsh/glob (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+ |  TAG: | zsh/glob-pattern (1)
+
+ 144642214000  ignore or include hidden files when running a cmd on "everything"                    
+
+
+
+------
+
+
+-----------------
+ TAG: index (46)
+-----------------
+
+index/all.md
+index/bash.md
+index/files.md
+index/git.md
+index/hardlink.md
+index/symlink.md
+index/vim.md
+index/zsh.md
+
+---------------------
+ TAG: index/bash (3)
+---------------------
+
+index/bash/file_patterns.md
+index/bash/glob.md
+index/bash/glob_pattern.md
+
+----------------------
+ TAG: index/files (2)
+----------------------
+
+index/files/glob_patterns.md
+index/files/hidden_files.md
+
+--------------------
+ TAG: index/git (2)
+--------------------
+
+index/git/branch.md
+index/git/symbolic_ref.md
+
+--------------------
+ TAG: index/vim (3)
+--------------------
+
+index/vim/buffers.md
+index/vim/commands.md
+index/vim/start.md
+
+--------------------
+ TAG: index/zsh (3)
+--------------------
+
+index/zsh/file_patterns.md
+index/zsh/glob.md
+index/zsh/glob_pattern.md
+
+--------------
+ TAG: src (9)
+--------------
+
+src/144641364200.md
+src/144642214000.md
+src/144689013800.md
+src/144689089400.md
+src/144689089401.md
+src/144689089402.md
+src/144692694700.md
+src/commit_count
+src/world.yml
+
+--------------
+ TAG: tmp (5)
+--------------
+
+tmp/144639847100.md
+tmp/144688967900.md
+tmp/144689025600.md
+tmp/teeoutput.log
+tmp/testing
+
+
