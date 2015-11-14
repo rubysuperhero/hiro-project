@@ -261,6 +261,57 @@ stories:
       standard shortcuts, no matter how obscure they seem at the time"
     name: "#vim lets you define a leader key for a reason - avoid mappings that overwrite
       standard shortcuts, no matter how obscure they seem at the time"
+  "/Users/macbookpro/hero/tips/src/144752016100.md": !ruby/object:CliTasks::Note
+    data: |+
+      conveniently access functions in #vim using abbreviations and/or commands
+
+      For example, I wrote a function that looks through v:oldfiles for a search
+      pattern and opens the matches.  I gave the function some long, descriptive name,
+      but I named the commands and abbreviations like this:
+
+      ```
+      command! -nargs=+ VsOldfile call VsplitMatchingOldfilePartialFilename(<f-args>)
+      cabbrev vf VsOldfile
+      ```
+
+      This way, all I have to do is type `:vf<space>` and it expands into
+      `:VsOldFile<space>` which will call my function when given a search pattern.
+
+    file: "/Users/macbookpro/hero/tips/src/144752016100.md"
+    lines:
+    - 'conveniently access functions in #vim using abbreviations and/or commands'
+    - ''
+    - For example, I wrote a function that looks through v:oldfiles for a search
+    - pattern and opens the matches.  I gave the function some long, descriptive name,
+    - 'but I named the commands and abbreviations like this:'
+    - ''
+    - "```"
+    - command! -nargs=+ VsOldfile call VsplitMatchingOldfilePartialFilename(<f-args>)
+    - cabbrev vf VsOldfile
+    - "```"
+    - ''
+    - This way, all I have to do is type `:vf<space>` and it expands into
+    - "`:VsOldFile<space>` which will call my function when given a search pattern."
+    - ''
+    tags:
+    - vim
+    metadata: {}
+    body:
+    - 'conveniently access functions in #vim using abbreviations and/or commands'
+    - ''
+    - For example, I wrote a function that looks through v:oldfiles for a search
+    - pattern and opens the matches.  I gave the function some long, descriptive name,
+    - 'but I named the commands and abbreviations like this:'
+    - ''
+    - "```"
+    - command! -nargs=+ VsOldfile call VsplitMatchingOldfilePartialFilename(<f-args>)
+    - cabbrev vf VsOldfile
+    - "```"
+    - ''
+    - This way, all I have to do is type `:vf<space>` and it expands into
+    - "`:VsOldFile<space>` which will call my function when given a search pattern."
+    - ''
+    name: 'conveniently access functions in #vim using abbreviations and/or commands'
 tags:
   bash: []
   files: []
