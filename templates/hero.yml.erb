@@ -5,6 +5,8 @@ start_file:
     defer:
       literal:
         - 'app/assets'
+    exclude:
+      literal:
         - 'gif'
         - 'ico'
         - 'jpg'
@@ -14,9 +16,6 @@ start_file:
         - 'ttf'
         - 'woff'
         - 'woff2'
-    exclude:
-        regex:
-        literal:
 # custom_subcommands:
 #   tmux: 'tmux new -s {{project_name}} -c {{project_directory}}'
 #   migrate: 'rake db:migrate'
