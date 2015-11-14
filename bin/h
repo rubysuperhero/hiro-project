@@ -5,7 +5,7 @@ require 'awesome_print'
 # require 'pry'
 require 'optparse'
 require 'singleton'
-require 'mkmf'
+# require 'mkmf'
 require 'yaml'
 
 # H command requirements
@@ -77,13 +77,21 @@ module H
   module Env
     extend self
 
+    attr_accessor :paths_searched
     def path
       ENV['PATH']
     end
 
+    def paths
+      ENV['PATH'].split(':')
+    end
+
     def h_command?(bin)
-      find_executable("h-#{bin}").tap do
-        File.unlink('mkmf.log') if File.exist?('mkmf.log')
+      basename = format('h-%s', bin)
+      paths.each do |dir|
+        File.join(dir, basename).tap do |abspath|
+          return abspath if File.exist?(abspath)
+        end
       end
     end
   end
@@ -137,7 +145,7 @@ module H
         exit 1
       else
         if Env.h_command?(subcommand)
-          puts '%s command was found' % subcommand
+          # puts '%s command was found' % subcommand
           system("h-#{subcommand}", *args)
         else
           puts format('%s command not found...', subcommand)

@@ -517,7 +517,7 @@ class Help < SubCommand
 
   class << self
     def possible_matches
-      %w{ h help } + [nil]
+      %w{ ? help } + [nil]
     end
   end
 
