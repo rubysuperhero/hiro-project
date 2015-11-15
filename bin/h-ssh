@@ -1,0 +1,155 @@
+#!/usr/bin/env ruby
+
+# Subcommands are defined at the bottom
+# Each subcommand has its own class
+# see: Help
+
+require 'awesome_print'
+require 'optparse'
+
+class Options
+  def set(k,v)
+    k = k.to_sym
+    singleton_class.class_eval{ attr_accessor k }
+    instance_variable_set("@#{k}", v)
+  end
+
+  def method_missing(*asdf)
+    false
+  end
+end
+
+module MainCommand
+  extend self
+
+  attr_accessor :args, :stdinput, :stdoutput
+  attr_accessor :options
+  def run(args=ARGV.clone, inp=$stdin, out=$stdout)
+    @args, @stdinput, @stdoutput = args, inp, out
+    @options = Options.new
+
+    parse_options
+
+    process
+  end
+
+  def config_file
+    File.join ENV['HOME'], '.ssh/config'
+  end
+
+  def check_and_invalidate_config_cache
+    if @config_mtime && @config_mtime != File.mtime(config_file)
+      @config_file_lines = nil
+      @parsed_config = nil
+    end
+  end
+
+  def config_file_lines
+    check_and_invalidate_config_cache
+    @config_file_lines ||= IO.readlines(config_file).map do |line|
+      line.strip if line[/\w/]
+    end.compact
+  end
+
+  def parse_config
+    @parsed_config ||= config_file_lines.inject({}) do |conf,line|
+      words = line.strip.split(/\s+/)
+      key = words.shift.split(/(?=[A-Z])/).map(&:downcase).join(?_).to_sym
+      if key == :host
+        conf.fetch(:current_hosts, []).each do |host|
+          conf[host].merge! user_at_host: format('%s@%s', conf[host][:user], conf[host][:host_name])
+        end
+        conf.merge!(current_hosts: words)
+      end
+      conf.fetch(:current_hosts, []).each do |host|
+        conf.merge! host => conf.fetch(host, {}).merge!(key => words.count == 1 ? words.first : words)
+      end
+      conf
+    end.tap{|conf| conf.delete :current_hosts }
+  end
+
+  def max_len(arr)
+    arr.inject(0) do |maxlen,str|
+      str.length > maxlen ? str.length : maxlen
+    end
+  end
+
+  def add_ssh_key
+    # TODO: Implement More-Intuitively
+    edit_config
+  end
+
+  def authorize_ssh_key; end
+
+  def generate_ssh_key
+    # TODO: Implement More-Intuitively
+  end
+
+  def print_hosts
+    w = max_len(parse_config.keys)
+    userw = max_len(parse_config.values.map{|v| v[:user] }.compact)
+    hostw = max_len(parse_config.values.map{|v| v[:host_name] }.compact)
+    puts format("  %-#{w + 2}s => %#{ userw }s @ %-#{ hostw }s", 'Alias', '<user>', '<hostname>')
+    parse_config.keys.group_by{|k| parse_config[k][:identity_file] }.each do |keyfile,host_keys|
+      puts
+      puts format("SSH Key: %s", keyfile && File.basename(keyfile))
+      puts format("SSH Key: %s", keyfile && File.basename(keyfile)).gsub(/./, ?-)
+      host_keys.sort.each do |k|
+        v = parse_config[k]
+        puts format("  %-#{w + 2}s => %#{ userw }s @ %-#{ hostw }s", k, v[:user].to_s, v[:host_name].to_s)
+      end
+    end
+    puts
+  end
+
+  def print_config
+    system('less', config_file)
+  end
+
+  def edit_config
+    system(ENV.fetch('EDITOR', 'vim'), config_file)
+    # system(ENV['EDITOR'] || 'vim', config_file)
+  end
+
+  def process
+    case subcmd
+    when 'h', 'host', 'hosts', 'l', 'list'
+      print_hosts
+    when 'c', 'config', 'cat', 'show'
+      print_config
+    when 'e', 'edit'
+      edit_config
+    when 'authorize'
+      authorize_ssh_key
+    when 'add-key', 'addkey', 'akey', 'new-key', 'newkey', 'nkey'
+      add_ssh_key
+    when 'generate-key', 'generatekey', 'gen-key', 'genkey'
+      generate_ssh_key
+    when 'help'
+      run_help
+    else
+      raise Exception, format('%s not found', subcmd)
+      exit 1
+    end
+    exit 0
+  end
+
+  def run_help
+    puts args.options
+  end
+
+  def subcmd
+    @subcmd ||= args.shift
+  end
+
+  def parse_options
+    args.options { |opts|
+      opts.on('-h', '--help', 'print this message') do
+        @options.set(:help, true)
+      end
+    }.parse!
+  end
+end
+
+MainCommand.run
+

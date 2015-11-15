@@ -15,3 +15,6 @@ dirname: /Users/macbookpro/hero/tips
  #vim lets you define a leader key for a reason - avoid mappings that overwrite   |  'src/144692694700.md'
  #vim lets you define a leader key for a reason - avoid mappings that overwrite   |  '/Users/macbookpro/hero/tips/src/144692694700.md'
 
+ conveniently access functions in #vim using abbreviations and/or commands        |  'src/144752016100.md'
+ conveniently access functions in #vim using abbreviations and/or commands        |  '/Users/macbookpro/hero/tips/src/144752016100.md'
+
