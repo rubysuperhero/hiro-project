@@ -598,7 +598,7 @@ module CliTasks
         file.puts ''
 
         world.stories.each do |story|
-          file.puts format("  %-50s | '%s'", story.name[0,50], File.absolute_path(story.file))
+          file.puts format("  %-70s | '%s'", story.name[0,70], File.absolute_path(story.file))
         end
 
         file.puts ''
