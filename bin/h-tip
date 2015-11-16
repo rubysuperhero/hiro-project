@@ -90,7 +90,7 @@ module CliTasks
         File.join(git_root, 'tasks'),
         File.join(hero_path, 'tasks'),
       ].find do |p|
-        File.exist?(p) && File.directory?(p)
+        !(File.exist?(p) && File.directory?(p))
       end || File.join(git_root, 'tasks')
     end
 
@@ -550,21 +550,36 @@ module CliTasks
         file.puts ''
       end
 
+      File.open(all_index, 'a') do |file|
+        file.puts ''
+        file.puts 'All Stories'
+        file.puts '-----------'
+        file.puts ''
+
+        world.stories.reverse.each do |story|
+          file.puts format("  %-70s | '%s'", story.name[0,70], File.absolute_path(story.file))
+          file.puts format("    %-68s |", '#' + story.tags.join(' #')[0,67])
+          file.puts format("  %-70s |", '')
+        end
+
+        file.puts ''
+      end
+
+
       last_path = []
       world.tags.each do |tag,stories|
-        # this_path = tag.split(?/)
-        # path_diff = this_path.drop_while.with_index{|e,i|
-        #   last_path[i] == e
-        # }
-        # last_path = this_path
-        # indent = '  ' * (this_path.count - path_diff.count)
+        this_path = tag.split(?/)
+        path_diff = this_path.drop_while.with_index{|e,i|
+          last_path[i] == e
+        }
+        last_path = this_path
+        indent = '  ' * ((this_path.count - path_diff.count) + 1)
         File.open(all_index, 'a') do |file|
-          file.print tag + ' '
-          # path_diff[0..-2].each do |tagdir|
-          #   file.puts format("%-50s |", format('%s%s', indent, tagdir))
-          #   indent += '  '
-          # end
-          # file.puts format("%-50s | 'index/%s.md'", format('%s%s', indent, path_diff.last), tag)
+          path_diff[0..-2].each do |tagdir|
+            file.puts format("%-50s |", format('%s%s', indent, tagdir))
+            indent += '  '
+          end
+          file.puts format("%-50s | 'index/%s.md'", format('%s%s', indent, path_diff.last), tag)
         end if opts.fetch(:all, false)
 
         new_tag = true
@@ -589,16 +604,6 @@ module CliTasks
           next if st.tags == nil || st.tags.count > 0
           src = File.absolute_path(st.file)
           file.puts format("%-50s | '%s'", st.short_name, src)
-        end
-
-        file.puts ''
-        file.puts ''
-        file.puts 'All Stories'
-        file.puts '-----------'
-        file.puts ''
-
-        world.stories.reverse.each do |story|
-          file.puts format("  %-70s | '%s'", story.name[0,70], File.absolute_path(story.file))
         end
 
         file.puts ''
@@ -1161,6 +1166,7 @@ module CliTasks
   class Commands
     class << self
       def commit(message='auto-saving notes')
+        return
         return unless system('git rev-parse --show-toplevel &>/dev/null')
 
         reindex

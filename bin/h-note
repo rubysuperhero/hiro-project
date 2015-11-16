@@ -90,7 +90,7 @@ module CliTasks
         File.join(git_root, 'tasks'),
         File.join(hero_path, 'tasks'),
       ].find do |p|
-        File.exist?(p) && File.directory?(p)
+        !(File.exist?(p) && File.directory?(p))
       end || File.join(git_root, 'tasks')
     end
 
@@ -550,6 +550,22 @@ module CliTasks
         file.puts ''
       end
 
+      File.open(all_index, 'a') do |file|
+        file.puts ''
+        file.puts 'All Stories'
+        file.puts '-----------'
+        file.puts ''
+
+        world.stories.reverse.each do |story|
+          file.puts format("  %-70s | '%s'", story.name[0,70], File.absolute_path(story.file))
+          file.puts format("    %-68s |", '#' + story.tags.join(' #')[0,67])
+          file.puts format("  %-70s |", '')
+        end
+
+        file.puts ''
+      end
+
+
       last_path = []
       world.tags.each do |tag,stories|
         this_path = tag.split(?/)
@@ -557,7 +573,7 @@ module CliTasks
           last_path[i] == e
         }
         last_path = this_path
-        indent = '  ' * (this_path.count - path_diff.count)
+        indent = '  ' * ((this_path.count - path_diff.count) + 1)
         File.open(all_index, 'a') do |file|
           path_diff[0..-2].each do |tagdir|
             file.puts format("%-50s |", format('%s%s', indent, tagdir))
@@ -1150,6 +1166,7 @@ module CliTasks
   class Commands
     class << self
       def commit(message='auto-saving notes')
+        return
         return unless system('git rev-parse --show-toplevel &>/dev/null')
 
         reindex

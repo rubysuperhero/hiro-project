@@ -554,6 +554,22 @@ module CliTasks
         file.puts ''
       end
 
+      File.open(all_index, 'a') do |file|
+        file.puts ''
+        file.puts 'All Stories'
+        file.puts '-----------'
+        file.puts ''
+
+        world.stories.reverse.each do |story|
+          file.puts format("  %-70s | '%s'", story.name[0,70], File.absolute_path(story.file))
+          file.puts format("    %-68s |", '#' + story.tags.join(' #')[0,67])
+          file.puts format("  %-70s |", '')
+        end
+
+        file.puts ''
+      end
+
+
       last_path = []
       world.tags.each do |tag,stories|
         this_path = tag.split(?/)
@@ -561,7 +577,7 @@ module CliTasks
           last_path[i] == e
         }
         last_path = this_path
-        indent = '  ' * (this_path.count - path_diff.count)
+        indent = '  ' * ((this_path.count - path_diff.count) + 1)
         File.open(all_index, 'a') do |file|
           path_diff[0..-2].each do |tagdir|
             file.puts format("%-50s |", format('%s%s', indent, tagdir))
