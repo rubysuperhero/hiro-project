@@ -18,3 +18,6 @@ dirname: /Users/macbookpro/hero/tasks
  make a directory for reusable ruby libs or shell scripts (normally start as      |  'src/144689283000.md'
  make a directory for reusable ruby libs or shell scripts (normally start as      |  '/Users/macbookpro/hero/tasks/src/144689283000.md'
 
+ add heavier subcommands to h-project like task that takes its own subcommands,   |  'src/144760651000.md'
+ add heavier subcommands to h-project like task that takes its own subcommands,   |  '/Users/macbookpro/hero/tasks/src/144760651000.md'
+

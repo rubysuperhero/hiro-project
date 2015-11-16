@@ -61,3 +61,5 @@ dotzsh:
   path: "/Users/macbookpro/better-dotfiles/src/zsh"
 suprtips:
   path: "/Users/macbookpro/projects/shtips"
+okane:
+  path: "/Users/macbookpro/projects/okane"

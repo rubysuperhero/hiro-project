@@ -312,6 +312,61 @@ stories:
     - "`:VsOldFile<space>` which will call my function when given a search pattern."
     - ''
     name: 'conveniently access functions in #vim using abbreviations and/or commands'
+  "/Users/macbookpro/hero/tips/src/144769570700.md": !ruby/object:CliTasks::Note
+    data: |
+      delete file using its inode number
+
+      sometimes a file is named in a way that it is hard to delete using the normal
+      command-line.  to delete it, first find it's inode number, then use find to run
+      rm on it.
+
+      ```
+      ls -il   # the first column is the inode number
+
+      find . -inum "$INODE_GOES_HERE" -exec rm -i \{\} \;
+
+      ```
+
+      #unix #unix/rm #files
+    file: "/Users/macbookpro/hero/tips/src/144769570700.md"
+    lines:
+    - delete file using its inode number
+    - ''
+    - sometimes a file is named in a way that it is hard to delete using the normal
+    - command-line.  to delete it, first find it's inode number, then use find to
+      run
+    - rm on it.
+    - ''
+    - "```"
+    - 'ls -il   # the first column is the inode number'
+    - ''
+    - find . -inum "$INODE_GOES_HERE" -exec rm -i \{\} \;
+    - ''
+    - "```"
+    - ''
+    - "#unix #unix/rm #files"
+    tags:
+    - files
+    - unix
+    - unix/rm
+    metadata: {}
+    body:
+    - delete file using its inode number
+    - ''
+    - sometimes a file is named in a way that it is hard to delete using the normal
+    - command-line.  to delete it, first find it's inode number, then use find to
+      run
+    - rm on it.
+    - ''
+    - "```"
+    - 'ls -il   # the first column is the inode number'
+    - ''
+    - find . -inum "$INODE_GOES_HERE" -exec rm -i \{\} \;
+    - ''
+    - "```"
+    - ''
+    - "#unix #unix/rm #files"
+    name: delete file using its inode number
 tags:
   bash: []
   files: []
@@ -333,3 +388,5 @@ tags:
   vim/start: []
   vim/buffers: []
   vim/commands: []
+  unix: []
+  unix/rm: []

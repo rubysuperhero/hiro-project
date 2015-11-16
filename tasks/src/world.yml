@@ -331,6 +331,27 @@ stories:
     body:
     - create a project all subcommand for running a command on all the projects
     name: create a project all subcommand for running a command on all the projects
+  "/Users/macbookpro/hero/tasks/src/144760651000.md": !ruby/object:CliTasks::Note
+    data: 'add heavier subcommands to h-project like task that takes its own subcommands,
+      load the file somehow and call the class directly #hero/projects #hero/todo
+      #todo/hero'
+    file: "/Users/macbookpro/hero/tasks/src/144760651000.md"
+    lines:
+    - 'add heavier subcommands to h-project like task that takes its own subcommands,
+      load the file somehow and call the class directly #hero/projects #hero/todo
+      #todo/hero'
+    tags:
+    - hero/projects
+    - hero/todo
+    - todo/hero
+    metadata: {}
+    body:
+    - 'add heavier subcommands to h-project like task that takes its own subcommands,
+      load the file somehow and call the class directly #hero/projects #hero/todo
+      #todo/hero'
+    name: 'add heavier subcommands to h-project like task that takes its own subcommands,
+      load the file somehow and call the class directly #hero/projects #hero/todo
+      #todo/hero'
 tags:
   bash/todo: []
   hero/todo: []
