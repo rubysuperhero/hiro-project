@@ -597,7 +597,7 @@ module CliTasks
         file.puts '-----------'
         file.puts ''
 
-        world.stories.each do |story|
+        world.stories.reverse.each do |story|
           file.puts format("  %-70s | '%s'", story.name[0,70], File.absolute_path(story.file))
         end
 
