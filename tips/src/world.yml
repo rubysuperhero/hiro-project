@@ -367,6 +367,246 @@ stories:
     - ''
     - "#unix #unix/rm #files"
     name: delete file using its inode number
+  "/Users/macbookpro/hero/tips/src/144770572800.md": !ruby/object:CliTasks::Note
+    data: |
+      #idealism all commands should have allow their output to be filtered with a pattern (regex)
+    file: "/Users/macbookpro/hero/tips/src/144770572800.md"
+    lines:
+    - "#idealism all commands should have allow their output to be filtered with a
+      pattern (regex)"
+    tags:
+    - idealism
+    metadata: {}
+    body:
+    - "#idealism all commands should have allow their output to be filtered with a
+      pattern (regex)"
+    name: "#idealism all commands should have allow their output to be filtered with
+      a pattern (regex)"
+  "/Users/macbookpro/hero/tips/src/144770572801.md": !ruby/object:CliTasks::Note
+    data: |
+      #tips/bash make shell commands for the sites you visit often, probably with search builtin, etc.
+    file: "/Users/macbookpro/hero/tips/src/144770572801.md"
+    lines:
+    - "#tips/bash make shell commands for the sites you visit often, probably with
+      search builtin, etc."
+    tags:
+    - tips/bash
+    metadata: {}
+    body:
+    - "#tips/bash make shell commands for the sites you visit often, probably with
+      search builtin, etc."
+    name: "#tips/bash make shell commands for the sites you visit often, probably
+      with search builtin, etc."
+  "/Users/macbookpro/hero/tips/src/144788368100.md": !ruby/object:CliTasks::Note
+    data: |
+      # quickref: mastering tmux
+
+      to master tmux, there are only a few things you need to learn.
+
+      ## Contents
+
+      * keyboard shortcuts
+      * concepts (controlling tmux from the shell)
+      * commands
+          * `list-commands`
+          * `list-keys`
+          * `list-*`
+          * `show-options`
+          * `show-window-options`
+          * `show-*`
+
+
+      ## keyboard shortcuts
+
+      The most important keyboard shortcut to learn is `<prefix>?`.  It is the default
+      shortcut for showing you a list of every other keyboard shortcut.
+
+      If I were to suggest any other shortcuts, they would probably be `<prefix>[`,
+      `<prefix>]`, and `<prefix>=`.  These shortcuts are for switching into copy-mode and pasting what
+      was last copied.  The last one, `<prefix>=`, shows you a list of all text that
+      has been copied, and lets you choose the one to paste.
+
+      ## concepts
+
+      This next tip is probably the most powerful one.
+
+      You can control tmux by running tmux commands from any shell prompt.  For
+      example, let's say the current tmux window has 2 panes, split horizontally.  By
+      default, the panes are equal in size.  However, let's assume that you want the
+      bottom pane to only take up 5 rows.  If you move focus to the bottom pane, and
+      you run the following shell command: `tmux resize-pane -y 5`, then tmux will
+      know which pane you are in, and set that pane's height to 5 rows/lines.
+
+      This same technique can by used to build all kinds of complex scripts, and it
+      gives you an enormous amount of control over tmux.
+
+      As a side note, this is possible, because all tmux panes set 2 environment
+      variables:
+
+      1. `TMUX` - the file that represents the tmux session
+      2. `TMUX_PANE` - the id to use when having a tmux command target the current pane
+        For example: `tmux resize-pane -y 5 -t $TMUX_PANE` is another way of running
+        the same command as earlier.
+
+      ## commands
+
+      There are probably 4 commands that every tmuxu user should know:
+
+      1. `list-commands` - lists every possible tmux command with all possible options
+      2. `list-keys` - lists all configured keyboard shortcuts, the same thing as
+         typing `<prefix>?` inside a tmux session
+      3. `show-options` - lists all configurable tmux options
+      4. `show-window-options` - lists all configurable tmux options that affect the
+         current window.
+
+      Learning all of these commands, and how to use them to manipulate tmux, will let
+      you do anything you can imagine with tmux, as long as tmux is capable of doing
+      it.
+
+      #tmux
+    file: "/Users/macbookpro/hero/tips/src/144788368100.md"
+    lines:
+    - "# quickref: mastering tmux"
+    - ''
+    - to master tmux, there are only a few things you need to learn.
+    - ''
+    - "## Contents"
+    - ''
+    - "* keyboard shortcuts"
+    - "* concepts (controlling tmux from the shell)"
+    - "* commands"
+    - "    * `list-commands`"
+    - "    * `list-keys`"
+    - "    * `list-*`"
+    - "    * `show-options`"
+    - "    * `show-window-options`"
+    - "    * `show-*`"
+    - ''
+    - ''
+    - "## keyboard shortcuts"
+    - ''
+    - The most important keyboard shortcut to learn is `<prefix>?`.  It is the default
+    - shortcut for showing you a list of every other keyboard shortcut.
+    - ''
+    - If I were to suggest any other shortcuts, they would probably be `<prefix>[`,
+    - "`<prefix>]`, and `<prefix>=`.  These shortcuts are for switching into copy-mode
+      and pasting what"
+    - was last copied.  The last one, `<prefix>=`, shows you a list of all text that
+    - has been copied, and lets you choose the one to paste.
+    - ''
+    - "## concepts"
+    - ''
+    - This next tip is probably the most powerful one.
+    - ''
+    - You can control tmux by running tmux commands from any shell prompt.  For
+    - example, let's say the current tmux window has 2 panes, split horizontally.  By
+    - default, the panes are equal in size.  However, let's assume that you want the
+    - bottom pane to only take up 5 rows.  If you move focus to the bottom pane, and
+    - 'you run the following shell command: `tmux resize-pane -y 5`, then tmux will'
+    - know which pane you are in, and set that pane's height to 5 rows/lines.
+    - ''
+    - This same technique can by used to build all kinds of complex scripts, and it
+    - gives you an enormous amount of control over tmux.
+    - ''
+    - As a side note, this is possible, because all tmux panes set 2 environment
+    - 'variables:'
+    - ''
+    - 1. `TMUX` - the file that represents the tmux session
+    - 2. `TMUX_PANE` - the id to use when having a tmux command target the current
+      pane
+    - "  For example: `tmux resize-pane -y 5 -t $TMUX_PANE` is another way of running"
+    - "  the same command as earlier."
+    - ''
+    - "## commands"
+    - ''
+    - 'There are probably 4 commands that every tmuxu user should know:'
+    - ''
+    - 1. `list-commands` - lists every possible tmux command with all possible options
+    - 2. `list-keys` - lists all configured keyboard shortcuts, the same thing as
+    - "   typing `<prefix>?` inside a tmux session"
+    - 3. `show-options` - lists all configurable tmux options
+    - 4. `show-window-options` - lists all configurable tmux options that affect the
+    - "   current window."
+    - ''
+    - Learning all of these commands, and how to use them to manipulate tmux, will
+      let
+    - you do anything you can imagine with tmux, as long as tmux is capable of doing
+    - it.
+    - ''
+    - "#tmux"
+    tags:
+    - tmux
+    metadata: {}
+    body:
+    - "# quickref: mastering tmux"
+    - ''
+    - to master tmux, there are only a few things you need to learn.
+    - ''
+    - "## Contents"
+    - ''
+    - "* keyboard shortcuts"
+    - "* concepts (controlling tmux from the shell)"
+    - "* commands"
+    - "    * `list-commands`"
+    - "    * `list-keys`"
+    - "    * `list-*`"
+    - "    * `show-options`"
+    - "    * `show-window-options`"
+    - "    * `show-*`"
+    - ''
+    - ''
+    - "## keyboard shortcuts"
+    - ''
+    - The most important keyboard shortcut to learn is `<prefix>?`.  It is the default
+    - shortcut for showing you a list of every other keyboard shortcut.
+    - ''
+    - If I were to suggest any other shortcuts, they would probably be `<prefix>[`,
+    - "`<prefix>]`, and `<prefix>=`.  These shortcuts are for switching into copy-mode
+      and pasting what"
+    - was last copied.  The last one, `<prefix>=`, shows you a list of all text that
+    - has been copied, and lets you choose the one to paste.
+    - ''
+    - "## concepts"
+    - ''
+    - This next tip is probably the most powerful one.
+    - ''
+    - You can control tmux by running tmux commands from any shell prompt.  For
+    - example, let's say the current tmux window has 2 panes, split horizontally.  By
+    - default, the panes are equal in size.  However, let's assume that you want the
+    - bottom pane to only take up 5 rows.  If you move focus to the bottom pane, and
+    - 'you run the following shell command: `tmux resize-pane -y 5`, then tmux will'
+    - know which pane you are in, and set that pane's height to 5 rows/lines.
+    - ''
+    - This same technique can by used to build all kinds of complex scripts, and it
+    - gives you an enormous amount of control over tmux.
+    - ''
+    - As a side note, this is possible, because all tmux panes set 2 environment
+    - 'variables:'
+    - ''
+    - 1. `TMUX` - the file that represents the tmux session
+    - 2. `TMUX_PANE` - the id to use when having a tmux command target the current
+      pane
+    - "  For example: `tmux resize-pane -y 5 -t $TMUX_PANE` is another way of running"
+    - "  the same command as earlier."
+    - ''
+    - "## commands"
+    - ''
+    - 'There are probably 4 commands that every tmuxu user should know:'
+    - ''
+    - 1. `list-commands` - lists every possible tmux command with all possible options
+    - 2. `list-keys` - lists all configured keyboard shortcuts, the same thing as
+    - "   typing `<prefix>?` inside a tmux session"
+    - 3. `show-options` - lists all configurable tmux options
+    - 4. `show-window-options` - lists all configurable tmux options that affect the
+    - "   current window."
+    - ''
+    - Learning all of these commands, and how to use them to manipulate tmux, will
+      let
+    - you do anything you can imagine with tmux, as long as tmux is capable of doing
+    - it.
+    - ''
+    - "#tmux"
+    name: "# quickref: mastering tmux"
 tags:
   bash: []
   files: []
@@ -390,3 +630,6 @@ tags:
   vim/commands: []
   unix: []
   unix/rm: []
+  idealism: []
+  tips/bash: []
+  tmux: []

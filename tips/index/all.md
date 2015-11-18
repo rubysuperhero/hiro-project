@@ -4,6 +4,18 @@ dirname: /Users/macbookpro/hero/tips
 All Stories
 -----------
 
+  # quickref: mastering tmux                                             | '/Users/macbookpro/hero/tips/src/144788368100.md'
+    #tmux                                                                |
+                                                                         |
+  /Users/macbookpro/hero/tips/tmp/144770581400.md                        | '/Users/macbookpro/hero/tips/src/144770581800.md'
+    #                                                                    |
+                                                                         |
+  #tips/bash make shell commands for the sites you visit often, probably | '/Users/macbookpro/hero/tips/src/144770572801.md'
+    #tips/bash                                                           |
+                                                                         |
+  #idealism all commands should have allow their output to be filtered w | '/Users/macbookpro/hero/tips/src/144770572800.md'
+    #idealism                                                            |
+                                                                         |
   delete file using its inode number                                     | '/Users/macbookpro/hero/tips/src/144769570700.md'
     #files #unix #unix/rm                                                |
                                                                          |
@@ -57,9 +69,14 @@ All Stories
     commands                                       | 'index/vim/commands.md'
   unix                                             | 'index/unix.md'
     rm                                             | 'index/unix/rm.md'
+  idealism                                         | 'index/idealism.md'
+  tips                                             |
+    bash                                           | 'index/tips/bash.md'
+  tmux                                             | 'index/tmux.md'
 
 
  Stories With No Tags
 ----------------------
 
+/Users/macbookpro/hero/tips/tmp/144770581400.md    | '/Users/macbookpro/hero/tips/src/144770581800.md'
 
